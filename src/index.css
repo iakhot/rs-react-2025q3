@@ -66,3 +66,19 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.link-button {
+  display: inline;
+  padding: 0;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+  background: transparent;
+}
+.link-button:hover {
+  color: #747bff;
+}
+.link-button:active {
+  border: 0;
+  outline: none;
+}
