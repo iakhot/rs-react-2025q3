@@ -1,0 +1,10 @@
+.search-button {
+  background-color: #1a1a1a;
+  padding: 0;
+  display: inline-flex;
+}
+.search-input {
+  height: 39px;
+  box-sizing: border-box;
+  display: inline-flex;
+}
