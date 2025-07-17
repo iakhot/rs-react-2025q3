@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import './index.css';
 
 interface SearchProps {
@@ -6,26 +6,37 @@ interface SearchProps {
   onSearch: (val: string | undefined) => void;
 }
 
-function Search({ value, onSearch }: SearchProps) {
-  const [term, setTerm] = useState(value);
-  return (
-    <div className="card">
-      <input
-        id="searchTerm"
-        className="search-input"
-        value={term}
-        onChange={(e) => setTerm(e.target.value)}
-      />
-      <button
-        id="searchButton"
-        onClick={() => onSearch(term)}
-        aria-label="Search button"
-        title="Search"
-      >
-        {'Search'}
-      </button>
-    </div>
-  );
+class Search extends React.Component<
+  SearchProps,
+  { term: string | undefined }
+> {
+  constructor(props: SearchProps) {
+    super(props);
+    this.state = {
+      term: this.props.value,
+    };
+  }
+
+  render() {
+    return (
+      <div className="card center">
+        <input
+          id="searchTerm"
+          className="search-input"
+          value={this.state.term}
+          onChange={(e) => this.setState({ term: e.target.value })}
+        />
+        <button
+          id="searchButton"
+          onClick={() => this.props.onSearch(this.state.term)}
+          aria-label="Search button"
+          title="Search"
+        >
+          {'Search'}
+        </button>
+      </div>
+    );
+  }
 }
 
 export default Search;

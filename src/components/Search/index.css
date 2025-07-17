@@ -3,8 +3,16 @@
   padding: 0;
   display: inline-flex;
 }
+
 .search-input {
   height: 39px;
   box-sizing: border-box;
   display: inline-flex;
+  width: 80%;
+}
+
+.center {
+  align-items: anchor-center;
+  display: flex;
+  justify-content: center;
 }

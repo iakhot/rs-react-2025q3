@@ -75,10 +75,16 @@ button:focus-visible {
   cursor: pointer;
   background: transparent;
 }
+
 .link-button:hover {
   color: #747bff;
 }
+
 .link-button:active {
   border: 0;
   outline: none;
+}
+
+.float-right {
+  float: right;
 }

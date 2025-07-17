@@ -1,0 +1,37 @@
+.container {
+  display: grid;
+  grid-template-rows: 30px;
+  grid-auto-rows: 70px;
+  grid-template-columns: 1fr 3fr;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.item {
+  position: relative;
+}
+.item:nth-of-type(odd) {
+  border-right: 2px solid #333333;
+}
+.item:not(:nth-of-type(-n + 2)) {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.fw600 {
+  font-weight: 600;
+}
+
+.descr {
+  overflow: hidden;
+  text-wrap-style: pretty;
+  text-overflow: ellipsis;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.vh10 {
+  min-height: 10vh;
+}

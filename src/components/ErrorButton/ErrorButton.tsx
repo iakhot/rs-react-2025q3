@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import React from 'react';
 
 class UnexpectedError extends Error {}
 
-function ErrorButton() {
-  const [, setError] = useState(false);
+class ErrorButton extends React.Component {
+  state = { error: null };
 
-  const handleClick = () => {
-    setError(() => {
+  handleClick = () => {
+    this.setState(() => {
       throw new UnexpectedError('Oops, something has happened ...');
     });
   };
-  return <button onClick={handleClick}>Throw error</button>;
+
+  render() {
+    return (
+      <button className="float-right" onClick={this.handleClick}>
+        Throw error
+      </button>
+    );
+  }
 }
 
 export default ErrorButton;
