@@ -1,5 +1,5 @@
 import type { SearchResults } from '../../App';
-import reactLogo from '../../assets/react.svg';
+import Loader from '../Loader';
 import CardList from './CardList';
 import './index.css';
 
@@ -8,7 +8,7 @@ function SearchResult(props: SearchResults) {
   return (
     <div className="card center vh10">
       {isLoading ? (
-        <img src={reactLogo} className="logo react" alt="React logo" />
+        <Loader />
       ) : error ? (
         <p className="warning text-center">
           An error has occurred while loading the data: {error.message}
