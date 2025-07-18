@@ -3,10 +3,9 @@ import type { Movie } from '../../App';
 function Card({ movie }: { movie: Movie }) {
   return (
     <>
-      <div className="item text-center"> {movie.name} </div>
+      <div className="item text-center">{movie.name ? movie.name : '...'}</div>
       <div className="item descr">
-        {' '}
-        {movie.description ? movie.description : '...'}{' '}
+        {movie.description ? movie.description : '...'}
       </div>
     </>
   );

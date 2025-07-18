@@ -52,8 +52,10 @@ class App extends React.Component<object, AppState> {
     return results.map((movie: object) => {
       return {
         id: movie.id,
-        name: movie.name ?? movie.alternativeName,
-        description: movie.description ?? movie.shortDescription,
+        name: movie.name ? movie.name : movie.alternativeName,
+        description: movie.description
+          ? movie.description
+          : movie.shortDescription,
       } as Movie;
     });
   }
