@@ -1,6 +1,6 @@
 import React from 'react';
 
-class UnexpectedError extends Error {}
+export class UnexpectedError extends Error {}
 
 class ErrorButton extends React.Component {
   state = { error: null };
