@@ -1,3 +1,5 @@
+import type { Movie } from '../App';
+
 export const DUMMY_ERROR = 'Simulated error in ChildComponent';
 export const ErrorDummy = ({
   shouldThrow = false,
@@ -10,4 +12,10 @@ export const ErrorDummy = ({
     throw new Error(message);
   }
   return <div>Dummy is rendered</div>;
+};
+
+export const movieStub: Movie = {
+  id: 123,
+  name: 'Star Wars',
+  description: 'A long time ago, in a galaxy far, far away...',
 };
