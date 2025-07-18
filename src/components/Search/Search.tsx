@@ -37,6 +37,7 @@ class Search extends React.Component<SearchProps, SearchState> {
       <div className="card center">
         <input
           id="searchTerm"
+          data-testid="search-input"
           className="search-input"
           value={this.state.term}
           onChange={(e) => this.setState({ term: e.target.value })}
@@ -44,6 +45,7 @@ class Search extends React.Component<SearchProps, SearchState> {
         />
         <button
           id="searchButton"
+          data-testid="search-button"
           onClick={() => this.handleSearchClick(this.state.term)}
           aria-label="Search button"
           title="Search"
