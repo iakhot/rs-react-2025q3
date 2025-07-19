@@ -22,7 +22,7 @@ function SearchResult(props: SearchResults) {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <div className="warning text-center">
+        <div data-testid="api-error" className="warning text-center">
           <div>An error has occurred while loading the data:</div>
           <div>{composeErrorMessage(error)}</div>
         </div>
