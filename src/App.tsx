@@ -5,6 +5,7 @@ import { loadFromStorage, saveToStorage } from './common/storageUtils';
 import React from 'react';
 import AxiosService from './common/axiosService';
 import SearchResult from './components/SearchResult';
+import type { AxiosError } from 'axios';
 
 interface AppState extends SearchResults {
   term: string;
@@ -13,11 +14,16 @@ interface AppState extends SearchResults {
 export interface SearchResults {
   results: Movie[];
   isLoading: boolean;
-  error: Error | null;
+  error: ApiError | null;
 }
 
-interface apiResult {
+interface ApiResult {
   docs: object[];
+}
+
+export interface ApiError extends Error {
+  status?: number;
+  statusText?: string;
 }
 
 export interface Movie {
@@ -64,13 +70,19 @@ class App extends React.Component<object, AppState> {
     this.setState({ isLoading: true });
     AxiosService.getMovies({ searchTerm: term })
       .then((res) => {
-        const data = res?.data as apiResult;
+        const data = res?.data as ApiResult;
         console.log(data);
         const movies = this.convertData(data.docs);
         this.setState({ results: movies });
       })
-      .catch((error: Error) => {
-        this.setState({ error: error });
+      .catch((error: AxiosError) => {
+        this.setState({
+          error: {
+            ...error,
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+          },
+        });
       })
       .finally(() => {
         this.setState({ isLoading: false });
