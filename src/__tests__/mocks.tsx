@@ -1,6 +1,7 @@
 import type { Movie } from '../App';
 
 export const DUMMY_ERROR = 'Simulated error in ChildComponent';
+export const TOKEN_REGEX = new RegExp(/^([A-Z0-9-]{7,8}){4}$/);
 export const ErrorDummy = ({
   shouldThrow = false,
   message = DUMMY_ERROR,

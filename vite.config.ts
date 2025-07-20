@@ -18,6 +18,8 @@ export default defineConfig({
         'src/index.{js,jsx,ts,tsx}',
         'src/setupTests.{js,ts}',
         'src/**/*.d.ts',
+        'src/**/index.{js,jsx,ts,tsx}',
+        'src/__tests__',
       ],
       thresholds: {
         statements: 80,
@@ -25,6 +27,9 @@ export default defineConfig({
         functions: 50,
         lines: 50,
       },
+    },
+    deps: {
+      moduleDirectories: ['node_modules', './src/__tests__'],
     },
   },
 });
