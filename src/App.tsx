@@ -56,6 +56,7 @@ class App extends React.Component<object, SearchResults> {
 
   loadData(term: string) {
     this.setState({ isLoading: true });
+    this.setState({ error: null });
     AxiosService.getMovies({ searchTerm: term })
       .then((res) => {
         const data = res?.data as ApiResult;

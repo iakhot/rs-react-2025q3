@@ -24,7 +24,7 @@ class Search extends React.Component<SearchProps, SearchState> {
     this.props.onSearch(this.state.term);
   }
 
-  handleSearchClick(value: string | undefined) {
+  handleSearchClick(value: string) {
     if (value !== undefined) {
       const term = value.trim();
       saveToStorage(term);
