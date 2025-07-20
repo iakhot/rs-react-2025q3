@@ -1,15 +1,10 @@
 import './App.css';
 import ErrorButton from './components/ErrorButton';
 import Search from './components/Search';
-import { loadFromStorage, saveToStorage } from './common/storageUtils';
 import React from 'react';
 import AxiosService from './common/axiosService';
 import SearchResult from './components/SearchResult';
 import type { AxiosError } from 'axios';
-
-interface AppState extends SearchResults {
-  term: string;
-}
 
 export interface SearchResults {
   results: Movie[];
@@ -32,22 +27,15 @@ export interface Movie {
   description: string;
 }
 
-class App extends React.Component<object, AppState> {
+class App extends React.Component<object, SearchResults> {
   constructor(props: object) {
     super(props);
-    const saved = loadFromStorage();
     this.state = {
-      term: saved !== undefined ? saved : '',
       results: [],
       isLoading: false,
       error: null,
     };
-    this.handleSearchClick = this.handleSearchClick.bind(this);
     this.loadData = this.loadData.bind(this);
-  }
-
-  componentDidMount(): void {
-    this.loadData(this.state.term);
   }
 
   componentWillUnmount(): void {
@@ -89,18 +77,10 @@ class App extends React.Component<object, AppState> {
       });
   }
 
-  handleSearchClick(value: string | undefined) {
-    if (value !== undefined) {
-      const term = value.trim();
-      saveToStorage(term);
-      this.loadData(term);
-    }
-  }
-
   render() {
     return (
       <>
-        <Search value={this.state.term} onSearch={this.handleSearchClick} />
+        <Search onSearch={this.loadData} />
         <SearchResult
           isLoading={this.state.isLoading}
           results={this.state.results}
