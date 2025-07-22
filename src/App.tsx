@@ -13,7 +13,12 @@ export interface SearchResults {
 }
 
 interface ApiResult {
-  docs: object[];
+  docs: ApiMovie[];
+}
+
+interface ApiMovie extends Movie {
+  shortDescription?: string;
+  alternativeName?: string;
 }
 
 export interface ApiError extends Error {
@@ -42,8 +47,8 @@ class App extends React.Component<object, SearchResults> {
     this.setState({ results: [] });
   }
 
-  convertData(results: object[]): Movie[] {
-    return results.map((movie: object) => {
+  convertData(results: ApiMovie[]): Movie[] {
+    return results.map((movie) => {
       return {
         id: movie.id,
         name: movie.name ? movie.name : movie.alternativeName,
