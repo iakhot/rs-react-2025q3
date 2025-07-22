@@ -1,4 +1,5 @@
-import type { Movie } from '../App';
+import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import type { ApiMovie, ApiResult, Movie } from '../App';
 
 export const DUMMY_ERROR = 'Simulated error in ChildComponent';
 export const TOKEN_REGEX = new RegExp(/^([A-Z0-9-]{7,8}){4}$/);
@@ -47,3 +48,13 @@ export const moviesList: Movie[] = [
       'Роман Энакина и Падме в преддверии битвы андроидов, клонов и джедаев. Самая романтичная часть космической саги',
   },
 ];
+
+export function mockResponse(data: ApiMovie[]): AxiosResponse<ApiResult> {
+  return {
+    data: { docs: data },
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+    config: { headers: {} } as InternalAxiosRequestConfig<null>,
+  };
+}

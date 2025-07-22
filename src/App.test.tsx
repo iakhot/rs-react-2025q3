@@ -1,17 +1,19 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App';
-import { moviesList, TOKEN_REGEX } from './__tests__/mocks';
+import { mockResponse, moviesList, TOKEN_REGEX } from './__tests__/mocks';
 import axios from 'axios';
 import AxiosService from './common/axiosService';
+import { renderAsync } from './__tests__/setupTests';
 
 vi.mock('axios');
 vi.mock('./common/axiosService');
-const mockData = { docs: moviesList };
 
 describe('App ', () => {
   it('renders correctly', async () => {
-    vi.mocked(AxiosService.getMovies).mockResolvedValue({ data: mockData });
+    vi.mocked(AxiosService.getMovies).mockResolvedValue(
+      mockResponse(moviesList)
+    );
     const length = moviesList.length;
 
     expect(() => render(<App />)).not.toThrow();
@@ -25,18 +27,18 @@ describe('App ', () => {
     });
     expect(screen.getByText('Throw error')).toBeInTheDocument();
   });
-  it('makes api call', () => {
+  it('makes api call', async () => {
     const spyAxiosGet = vi
       .spyOn(AxiosService, 'getMovies')
-      .mockResolvedValueOnce({ data: [] });
-    render(<App />);
+      .mockResolvedValueOnce(mockResponse([]));
+    await renderAsync(<App />);
 
     expect(spyAxiosGet).toHaveBeenCalledWith(
       expect.objectContaining({ searchTerm: '' })
     );
   });
   it('renders loading', () => {
-    vi.mocked(AxiosService.getMovies).mockResolvedValueOnce({ data: [] });
+    vi.mocked(AxiosService.getMovies).mockResolvedValueOnce(mockResponse([]));
 
     render(<App />);
     expect(screen.getByTestId('loader')).toBeInTheDocument();
@@ -44,10 +46,9 @@ describe('App ', () => {
 });
 
 describe('App API integration', () => {
-  it('calls API with correct params', () => {
-    vi.mocked(axios.get).mockRejectedValueOnce({ data: [] });
-    //axios.get.mockResolvedValueOnce({ data: [] });
-    render(<App />);
+  it('calls API with correct params', async () => {
+    vi.mocked(axios.get).mockRejectedValueOnce({});
+    await renderAsync(<App />);
     expect(axios.get).toHaveBeenCalledWith(
       expect.stringContaining('/movie/search?query=&limit=5&page=1'),
       expect.objectContaining({
@@ -58,12 +59,12 @@ describe('App API integration', () => {
     );
   });
   it('handles successful response', async () => {
-    vi.mocked(AxiosService.getMovies).mockResolvedValueOnce({
-      data: mockData,
-    });
-    const length = mockData.docs.length;
+    vi.mocked(AxiosService.getMovies).mockResolvedValueOnce(
+      mockResponse(moviesList)
+    );
+    const length = moviesList.length;
 
-    render(<App />);
+    await renderAsync(<App />);
     await waitFor(() => {
       expect(screen.getByText('Name')).toBeInTheDocument();
       expect(screen.getByText('Description')).toBeInTheDocument();
@@ -75,7 +76,7 @@ describe('App API integration', () => {
     const error = 'Network error';
     vi.mocked(AxiosService.getMovies).mockRejectedValueOnce(new Error(error));
 
-    render(<App />);
+    await renderAsync(<App />);
     const warning = await screen.findByTestId('api-error');
     expect(warning).toHaveTextContent(
       `An error has occurred while loading the data:${error}`

@@ -12,11 +12,11 @@ export interface SearchResults {
   error: ApiError | null;
 }
 
-interface ApiResult {
+export interface ApiResult {
   docs: ApiMovie[];
 }
 
-interface ApiMovie extends Movie {
+export interface ApiMovie extends Movie {
   shortDescription?: string;
   alternativeName?: string;
 }
