@@ -25,7 +25,6 @@ describe('App ', () => {
       expect(screen.getAllByTestId('card-name')).toHaveLength(length);
       expect(screen.getAllByTestId('card-description')).toHaveLength(length);
     });
-    expect(screen.getByText('Throw error')).toBeInTheDocument();
   });
   it('makes api call', async () => {
     const spyAxiosGet = vi

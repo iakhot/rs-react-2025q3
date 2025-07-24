@@ -1,7 +1,6 @@
 import './App.css';
-import ErrorButton from './components/ErrorButton';
 import Search from './components/Search';
-import React from 'react';
+import { useCallback, useState } from 'react';
 import AxiosService from './common/axiosService';
 import SearchResult from './components/SearchResult';
 import type { AxiosError } from 'axios';
@@ -32,22 +31,12 @@ export interface Movie {
   description: string;
 }
 
-class App extends React.Component<object, SearchResults> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      results: [],
-      isLoading: false,
-      error: null,
-    };
-    this.loadData = this.loadData.bind(this);
-  }
+function App() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<ApiError | null>(null);
+  const [results, setResults] = useState<Movie[]>([]);
 
-  componentWillUnmount(): void {
-    this.setState({ results: [] });
-  }
-
-  convertData(results: ApiMovie[]): Movie[] {
+  const convertData = (results: ApiMovie[]): Movie[] => {
     return results.map((movie) => {
       return {
         id: movie.id,
@@ -57,48 +46,37 @@ class App extends React.Component<object, SearchResults> {
           : movie.shortDescription,
       } as Movie;
     });
-  }
+  };
 
-  loadData(term: string) {
-    this.setState({ isLoading: true });
-    this.setState({ error: null });
+  const loadData = useCallback((term: string) => {
+    setIsLoading(true);
+    setError(null);
     AxiosService.getMovies({ searchTerm: term })
       .then((res) => {
         const data = res?.data as ApiResult;
         console.log(data);
-        const movies = this.convertData(data.docs);
-        this.setState({ results: movies });
+        const movies = convertData(data.docs);
+        setResults(movies);
       })
       .catch((error: AxiosError) => {
-        this.setState({
-          error: {
-            message: error.message,
-            name: error.name,
-            status: error.response?.status,
-            statusText: error.response?.statusText,
-          },
+        setError({
+          message: error.message,
+          name: error.name,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
         });
       })
       .finally(() => {
-        this.setState({ isLoading: false });
+        setIsLoading(false);
       });
-  }
+  }, []);
 
-  render() {
-    return (
-      <>
-        <Search onSearch={this.loadData} />
-        <SearchResult
-          isLoading={this.state.isLoading}
-          results={this.state.results}
-          error={this.state.error}
-        />
-        <div className="card">
-          <ErrorButton />
-        </div>
-      </>
-    );
-  }
+  return (
+    <>
+      <Search onSearch={loadData} />
+      <SearchResult isLoading={isLoading} results={results} error={error} />
+    </>
+  );
 }
 
 export default App;
