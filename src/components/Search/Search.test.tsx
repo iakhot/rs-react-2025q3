@@ -2,16 +2,17 @@ import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Search from './Search';
 import { setup } from '../../__tests__/setupTests';
-import { loadFromStorage, saveToStorage } from '../../common/storageUtils';
 
 const testVal = 'Avatar';
+const storageKey = 'searchTerm';
+
 afterEach(() => {
   localStorage.clear();
 });
 
 describe('Search', () => {
   it('renders correctly with term', () => {
-    saveToStorage(testVal);
+    localStorage.setItem(storageKey, testVal);
     render(<Search onSearch={vi.fn()} />);
     expect(screen.getByRole('button')).toHaveTextContent('Search');
     expect(screen.getByRole('textbox')).toHaveValue(testVal);
@@ -35,10 +36,10 @@ describe('Search interaction', () => {
     const { ui } = setup(<Search onSearch={vi.fn()} />);
     const input = screen.getByTestId('search-input');
     expect(input).toHaveValue('');
-    expect(loadFromStorage()).toBe(undefined);
+    expect(localStorage.getItem(storageKey)).toBe(null);
     await ui.type(input, testVal);
     await ui.click(screen.getByTestId('search-button'));
-    expect(loadFromStorage()).toBe(testVal);
+    expect(localStorage.getItem(storageKey)).toBe(testVal);
   });
   it('trims value', async () => {
     const { ui } = setup(<Search onSearch={vi.fn()} />);
@@ -47,11 +48,11 @@ describe('Search interaction', () => {
     await ui.type(input, '   ' + testVal + '  ');
     await ui.click(screen.getByTestId('search-button'));
     expect(input).toHaveValue(testVal);
-    expect(loadFromStorage()).toBe(testVal);
+    expect(localStorage.getItem(storageKey)).toBe(testVal);
   });
   it('triggers callback on Search click', async () => {
     const mockCallback = vi.fn();
-    saveToStorage(testVal);
+    localStorage.setItem(storageKey, testVal);
     const { ui } = setup(<Search onSearch={mockCallback} />);
     const button = screen.getByTestId('search-button');
     await ui.click(button);

@@ -1,17 +1,15 @@
 import { useEffect, useState, type ChangeEvent, type FocusEvent } from 'react';
 import './index.css';
-import { loadFromStorage, saveToStorage } from '../../common/storageUtils';
+import { useLocalStorage } from '../../common/hooks';
 
 interface SearchProps {
   onSearch: (val: string) => void;
 }
 
 function Search({ onSearch }: SearchProps) {
-  const getTerm = () => {
-    const saved = loadFromStorage();
-    return saved !== undefined ? saved : '';
-  };
-  const [term, setTerm] = useState(getTerm);
+  const [savedTerm, saveTerm] = useLocalStorage('searchTerm');
+
+  const [term, setTerm] = useState(savedTerm);
 
   useEffect(() => {
     onSearch(term);
@@ -20,7 +18,7 @@ function Search({ onSearch }: SearchProps) {
   const handleSearchClick = (value: string): void => {
     if (value !== undefined) {
       const term = value.trim();
-      saveToStorage(term);
+      saveTerm(term);
       onSearch(term);
     }
   };
