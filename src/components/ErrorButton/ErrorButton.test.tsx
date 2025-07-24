@@ -11,10 +11,10 @@ describe('ErrorButton', () => {
     expect(btn).toBeInTheDocument();
     expect(btn).toHaveTextContent('Throw error');
   });
-  it('throws an error on click', () => {
+  it('throws an error on click', async () => {
     const { ui } = setup(<ErrorButton />);
     const promise = ui.click(screen.getByRole('button'));
-    expect(promise).rejects.toThrowError(UnexpectedError);
+    await expect(promise).rejects.toThrowError(UnexpectedError);
   });
   it('triggers error boundary fallback UI', async () => {
     const { ui } = setup(
