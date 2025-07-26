@@ -1,9 +1,7 @@
 import './App.css';
+import ErrorBoundary from './components/ErrorBoundary';
 import Search from './components/Search';
-import { useCallback, useState } from 'react';
-import AxiosService from './common/axiosService';
-import SearchResult from './components/SearchResult';
-import type { AxiosError } from 'axios';
+import { Outlet } from 'react-router';
 
 export interface SearchResults {
   results: Movie[];
@@ -12,7 +10,11 @@ export interface SearchResults {
 }
 
 export interface ApiResult {
-  docs: ApiMovie[];
+  docs: ApiMovie[] | Movie[];
+  total: number;
+  limit: number;
+  page: number;
+  pages: number;
 }
 
 export interface ApiMovie extends Movie {
@@ -20,7 +22,14 @@ export interface ApiMovie extends Movie {
   alternativeName?: string;
 }
 
-export interface ApiError extends Error {
+export class ApiError extends Error {
+  constructor(props: ApiError) {
+    super(props.message);
+    this.status = props.status;
+    this.statusText = props.statusText;
+    this.name = props.name;
+    this.stack = props.stack;
+  }
   status?: number;
   statusText?: string;
 }
@@ -32,50 +41,11 @@ export interface Movie {
 }
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ApiError | null>(null);
-  const [results, setResults] = useState<Movie[]>([]);
-
-  const convertData = (results: ApiMovie[]): Movie[] => {
-    return results.map((movie) => {
-      return {
-        id: movie.id,
-        name: movie.name ? movie.name : movie.alternativeName,
-        description: movie.description
-          ? movie.description
-          : movie.shortDescription,
-      } as Movie;
-    });
-  };
-
-  const loadData = useCallback((term: string) => {
-    setIsLoading(true);
-    setError(null);
-    AxiosService.getMovies({ searchTerm: term })
-      .then((res) => {
-        const data = res?.data as ApiResult;
-        console.log(data);
-        const movies = convertData(data.docs);
-        setResults(movies);
-      })
-      .catch((error: AxiosError) => {
-        setError({
-          message: error.message,
-          name: error.name,
-          status: error.response?.status,
-          statusText: error.response?.statusText,
-        });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
   return (
-    <>
-      <Search onSearch={loadData} />
-      <SearchResult isLoading={isLoading} results={results} error={error} />
-    </>
+    <ErrorBoundary>
+      <Search />
+      <Outlet />
+    </ErrorBoundary>
   );
 }
 

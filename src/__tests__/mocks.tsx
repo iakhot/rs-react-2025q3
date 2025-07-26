@@ -1,4 +1,4 @@
-import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+//import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import type { ApiMovie, ApiResult, Movie } from '../App';
 
 export const DUMMY_ERROR = 'Simulated error in ChildComponent';
@@ -49,12 +49,18 @@ export const moviesList: Movie[] = [
   },
 ];
 
-export function mockResponse(data: ApiMovie[]): AxiosResponse<ApiResult> {
+export function mockResponse(data: ApiMovie[] | Movie[]): ApiResult {
   return {
-    data: { docs: data },
-    status: 200,
-    statusText: 'OK',
-    headers: {},
-    config: { headers: {} } as InternalAxiosRequestConfig<null>,
+    docs: data,
+    total: 0,
+    pages: 0,
+    limit: 0,
+    page: 0,
+
+    // data: { docs: data, total: 0, pages: 0, limit: 0, page: 0 },
+    // status: 200,
+    // statusText: 'OK',
+    // headers: {},
+    // config: { headers: {} } as InternalAxiosRequestConfig<null>,
   };
 }

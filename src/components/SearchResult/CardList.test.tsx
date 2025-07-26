@@ -5,7 +5,7 @@ import CardList from './CardList';
 
 describe('CardList', () => {
   it('renders correctly with data', () => {
-    render(<CardList movies={moviesList} />);
+    render(<CardList />);
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
     const length = moviesList.length;
@@ -20,7 +20,7 @@ describe('CardList', () => {
     }
   });
   it('renders correctly without data', () => {
-    render(<CardList movies={[]} />);
+    render(<CardList />);
     expect(screen.queryByText('Name')).not.toBeInTheDocument();
     expect(screen.queryByText('Description')).not.toBeInTheDocument();
     expect(screen.queryByTestId('card-name')).toBeNull();

@@ -20,6 +20,6 @@ describe('Axios Service', () => {
         },
       })
     );
-    expect(result.data).toEqual(mockData);
+    expect(result).toEqual(mockData);
   });
 });

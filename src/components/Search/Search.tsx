@@ -1,30 +1,31 @@
 import { useEffect, useState, type ChangeEvent, type FocusEvent } from 'react';
 import './index.css';
 import { useLocalStorage } from '../../common/hooks';
+import { useNavigate } from 'react-router';
 
-interface SearchProps {
-  onSearch: (val: string) => void;
-}
+const getQueryString = (value: string): string => {
+  return encodeURI(`search?query=${value}&page=1`);
+};
 
-function Search({ onSearch }: SearchProps) {
+function Search() {
   const [savedTerm, saveTerm] = useLocalStorage('searchTerm');
-
   const [term, setTerm] = useState(savedTerm);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    onSearch(term);
+    navigate(getQueryString(term));
   }, []);
 
   const handleSearchClick = (value: string): void => {
     if (value !== undefined) {
-      const term = value.trim();
+      const term = value !== '' ? value.trim() : '';
       saveTerm(term);
-      onSearch(term);
+      navigate(getQueryString(term));
     }
   };
 
   return (
-    <div className="card center">
+    <div className="card center vw50">
       <input
         id="searchTerm"
         data-testid="search-input"
