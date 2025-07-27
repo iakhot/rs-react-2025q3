@@ -2,7 +2,7 @@ import { createBrowserRouter, redirect } from 'react-router';
 import App from './App';
 import axiosService from './common/axiosService';
 import SearchResult from './components/SearchResult';
-import { ErrorMessage } from './components/common';
+import { ErrorMessage, NotFound } from './components/common';
 import MovieDetails from './Details';
 import Search from './components/Search';
 
@@ -56,5 +56,9 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    Component: NotFound,
   },
 ]);
