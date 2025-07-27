@@ -8,21 +8,22 @@ function SearchResult(props: SearchResults) {
 
   const composeErrorMessage = (error: ApiError): string => {
     if (error.status) {
-      const status = `${error.status} ${error.statusText}`;
-      return error.status >= 500
-        ? `Server side error: ${status}`
-        : error.status >= 400
-          ? `Client side error: ${status}`
-          : `${status}`;
+      const status = error.status;
+      const message = `${status} ${error.statusText}`;
+      return status >= 500
+        ? `Server side error: ${message}`
+        : status >= 400
+          ? `Client side error: ${message}`
+          : `${message}`;
     } else return error.message;
   };
 
   return (
-    <div className="card center vh10">
+    <div data-testid="search-result" className="card center vh10">
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <div className="warning text-center">
+        <div data-testid="api-error" className="warning text-center">
           <div>An error has occurred while loading the data:</div>
           <div>{composeErrorMessage(error)}</div>
         </div>

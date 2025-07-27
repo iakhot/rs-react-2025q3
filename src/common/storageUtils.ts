@@ -1,5 +1,5 @@
-const APP_KEY = 'RS-REACT-APP';
-interface Profile {
+export const APP_KEY = 'RS-REACT-APP';
+export interface Profile {
   searchTerm: string;
 }
 

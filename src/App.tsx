@@ -12,11 +12,11 @@ export interface SearchResults {
   error: ApiError | null;
 }
 
-interface ApiResult {
+export interface ApiResult {
   docs: ApiMovie[];
 }
 
-interface ApiMovie extends Movie {
+export interface ApiMovie extends Movie {
   shortDescription?: string;
   alternativeName?: string;
 }
@@ -72,7 +72,8 @@ class App extends React.Component<object, SearchResults> {
       .catch((error: AxiosError) => {
         this.setState({
           error: {
-            ...error,
+            message: error.message,
+            name: error.name,
             status: error.response?.status,
             statusText: error.response?.statusText,
           },
