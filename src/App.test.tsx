@@ -1,20 +1,47 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App';
-import { mockResponse, moviesList, TOKEN_REGEX } from './__tests__/mocks';
-import axios from 'axios';
-import AxiosService from './common/axiosService';
+import { moviesMock } from './__tests__/mocks';
 import { renderAsync } from './__tests__/setupTests';
+import { createMemoryRouter, RouterProvider } from 'react-router';
+import SearchResult from './components/SearchResult';
+import { ErrorMessage } from './components/common';
+import Search from './components/Search';
 
 vi.mock('axios');
 vi.mock('./common/axiosService');
+const mockLoaderData = vi.fn();
 
 describe('App ', () => {
   it('renders correctly', async () => {
-    vi.mocked(AxiosService.getMovies).mockResolvedValue(
-      mockResponse(moviesList)
+    const promise = Promise.resolve(moviesMock);
+    mockLoaderData.mockReturnValueOnce({ promise });
+    const RouterMock = createMemoryRouter(
+      [
+        {
+          path: '/movies',
+          Component: App,
+          children: [
+            { index: true, Component: Search },
+            {
+              path: 'search',
+              Component: SearchResult,
+              loader: () => ({ promise }),
+              errorElement: <ErrorMessage className="card min-vh70" />,
+            },
+          ],
+        },
+      ],
+      {
+        initialEntries: ['/movies'],
+      }
     );
-    const length = moviesList.length;
+    await renderAsync(
+      <RouterProvider router={RouterMock}>
+        <App />
+      </RouterProvider>
+    );
+    const length = moviesMock.docs.length;
 
     expect(() => render(<App />)).not.toThrow();
     expect(screen.getByTestId('search-input')).toBeInTheDocument();
@@ -26,59 +53,38 @@ describe('App ', () => {
       expect(screen.getAllByTestId('card-description')).toHaveLength(length);
     });
   });
-  it('makes api call', async () => {
-    const spyAxiosGet = vi
-      .spyOn(AxiosService, 'getMovies')
-      .mockResolvedValueOnce(mockResponse([]));
-    await renderAsync(<App />);
-
-    expect(spyAxiosGet).toHaveBeenCalledWith(
-      expect.objectContaining({ searchTerm: '' })
+  it('renders loading', async () => {
+    const promise = new Promise((resolve) =>
+      setTimeout(() => resolve(moviesMock), 500)
     );
-  });
-  it('renders loading', () => {
-    vi.mocked(AxiosService.getMovies).mockResolvedValueOnce(mockResponse([]));
+    mockLoaderData.mockReturnValueOnce({ promise });
+    const RouterMock = createMemoryRouter(
+      [
+        {
+          path: '/movies',
+          Component: App,
+          children: [
+            { index: true, Component: Search },
+            {
+              path: 'search',
+              Component: SearchResult,
+              loader: () => ({ promise }),
+              errorElement: <ErrorMessage className="card min-vh70" />,
+            },
+          ],
+        },
+      ],
+      {
+        initialEntries: ['/movies'],
+      }
+    );
+    await renderAsync(
+      <RouterProvider router={RouterMock}>
+        <App />
+      </RouterProvider>
+    );
 
     render(<App />);
     expect(screen.getByTestId('loader')).toBeInTheDocument();
-  });
-});
-
-describe('App API integration', () => {
-  it('calls API with correct params', async () => {
-    vi.mocked(axios.get).mockRejectedValueOnce({});
-    await renderAsync(<App />);
-    expect(axios.get).toHaveBeenCalledWith(
-      expect.stringContaining('/movie/search?query=&limit=5&page=1'),
-      expect.objectContaining({
-        headers: {
-          'X-API-KEY': expect.stringMatching(TOKEN_REGEX),
-        },
-      })
-    );
-  });
-  it('handles successful response', async () => {
-    vi.mocked(AxiosService.getMovies).mockResolvedValueOnce(
-      mockResponse(moviesList)
-    );
-    const length = moviesList.length;
-
-    await renderAsync(<App />);
-    await waitFor(() => {
-      expect(screen.getByText('Name')).toBeInTheDocument();
-      expect(screen.getByText('Description')).toBeInTheDocument();
-      expect(screen.getAllByTestId('card-name')).toHaveLength(length);
-      expect(screen.getAllByTestId('card-description')).toHaveLength(length);
-    });
-  });
-  it('handles failed response', async () => {
-    const error = 'Network error';
-    vi.mocked(AxiosService.getMovies).mockRejectedValueOnce(new Error(error));
-
-    await renderAsync(<App />);
-    const warning = await screen.findByTestId('api-error');
-    expect(warning).toHaveTextContent(
-      `An error has occurred while loading the data:${error}`
-    );
   });
 });

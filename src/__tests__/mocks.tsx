@@ -105,11 +105,5 @@ export function mockResponse(data: ApiMovie[] | Movie[]): ApiResult {
     pages: 0,
     limit: 0,
     page: 0,
-
-    // data: { docs: data, total: 0, pages: 0, limit: 0, page: 0 },
-    // status: 200,
-    // statusText: 'OK',
-    // headers: {},
-    // config: { headers: {} } as InternalAxiosRequestConfig<null>,
   };
 }
