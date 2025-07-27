@@ -40,6 +40,17 @@ export interface Movie {
   description: string;
 }
 
+export interface MovieDetails {
+  id: number;
+  name: string;
+  year?: number | '';
+  posterURL?: string;
+  description?: string;
+  runtime?: number;
+  rating?: number;
+  genres?: string;
+}
+
 function App() {
   return (
     <ErrorBoundary>

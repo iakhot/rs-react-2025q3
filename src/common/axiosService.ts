@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
-import { type ApiMovie, type ApiResult, type Movie, ApiError } from '../App';
+import { type ApiResult, ApiError, type MovieDetails } from '../App';
+import * as utils from './utils';
 
 const apiUrl = 'https://api.kinopoisk.dev/v1.4';
 const token = 'CZA38XR-FRA4EH3-KAPJRZ8-C3S9DZ8';
@@ -11,18 +12,6 @@ interface SearchParams {
 }
 
 class AxiosService {
-  convertData = (results: ApiMovie[]): Movie[] => {
-    return results.map((movie) => {
-      return {
-        id: movie.id,
-        name: movie.name ? movie.name : movie.alternativeName,
-        description: movie.description
-          ? movie.description
-          : movie.shortDescription,
-      } as Movie;
-    });
-  };
-
   getRequest = (url: string) =>
     axios
       .get(url, {
@@ -38,7 +27,7 @@ class AxiosService {
     )
       .then((res) => {
         const data = res?.data as ApiResult;
-        const movies = this.convertData(data.docs);
+        const movies = utils.convertData(data.docs);
         return {
           docs: movies,
           total: data.total,
@@ -46,6 +35,23 @@ class AxiosService {
           page: data.page,
           pages: data.pages,
         } as ApiResult;
+      })
+      .catch((error: AxiosError) => {
+        const apiError: ApiError = {
+          message: error.message,
+          name: error.name,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+        };
+        throw new ApiError(apiError);
+      });
+
+  getMovieDetails = ({ id }: { id: string }) =>
+    this.getRequest(`${apiUrl}/movie/${id}`)
+      .then((res) => {
+        const data = res?.data;
+        const details = utils.convertDetails(data);
+        return details as MovieDetails;
       })
       .catch((error: AxiosError) => {
         const apiError: ApiError = {

@@ -11,12 +11,6 @@
   width: 80%;
 }
 
-.center {
-  align-items: anchor-center;
-  display: flex;
-  justify-content: center;
-}
-
 .vw50 {
   width: 100%;
 }
