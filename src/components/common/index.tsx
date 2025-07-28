@@ -1,2 +1,2 @@
 export { ErrorMessage } from './ErrorMessage';
-export { NotFound } from './NorFound';
+export { NotFound } from './NotFound';

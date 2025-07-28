@@ -1,4 +1,4 @@
-import type { ApiError, ApiMovie, Movie, MovieDetails } from '../App';
+import type { ApiError, ApiMovie, Movie } from '../App';
 
 export const composeErrorMessage = (error: ApiError): string => {
   if (error.status) {
@@ -22,17 +22,4 @@ export const convertData = (results: ApiMovie[]): Movie[] => {
         : movie.shortDescription,
     } as Movie;
   });
-};
-
-export const convertDetails = (data: object): MovieDetails => {
-  return {
-    id: data.id,
-    name: data.name ? data.name : data.alternativeName,
-    year: data.year ? data.year : '',
-    posterURL: data.poster?.previewUrl,
-    rating: data.rating.kp ? data.rating.kp : data.rating.imdb,
-    genres: data.genres.map((g) => g.name).join(', '),
-    runtime: data.movieLength,
-    description: data.description ? data.description : data.shortDescription,
-  };
 };

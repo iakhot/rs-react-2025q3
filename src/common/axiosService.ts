@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { type ApiResult, ApiError, type MovieDetails } from '../App';
+import { type ApiResult, ApiError, type ApiMovieDetails } from '../App';
 import * as utils from './utils';
 
 const apiUrl = 'https://api.kinopoisk.dev/v1.4';
@@ -50,8 +50,7 @@ class AxiosService {
     this.getRequest(`${apiUrl}/movie/${id}`)
       .then((res) => {
         const data = res?.data;
-        const details = utils.convertDetails(data);
-        return details as MovieDetails;
+        return data as ApiMovieDetails;
       })
       .catch((error: AxiosError) => {
         const apiError: ApiError = {

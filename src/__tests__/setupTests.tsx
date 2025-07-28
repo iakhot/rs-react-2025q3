@@ -7,7 +7,7 @@ import { afterEach } from 'vitest';
 import { createMemoryRouter, createRoutesStub } from 'react-router';
 import React from 'react';
 import { ErrorMessage } from '../components/common';
-import type { ApiResult, MovieDetails } from '../App';
+import type { ApiResult, ApiMovieDetails } from '../App';
 
 export function setup(jsx: ReactNode) {
   return {
@@ -16,7 +16,7 @@ export function setup(jsx: ReactNode) {
   };
 }
 
-export function renderAsync(jsx: ReactNode) {
+export function renderAsync(jsx: ReactNode | React.ReactElement) {
   return act(async () => render(jsx));
 }
 
@@ -36,7 +36,7 @@ export function createRouteStub(path: string, component: React.JSX.Element) {
 export function mockMemoryRouter(
   path: string,
   component: React.JSX.Element,
-  loaderMock: () => Promise<ApiResult> | Promise<MovieDetails>
+  loaderMock: () => Promise<ApiResult> | Promise<ApiMovieDetails>
 ) {
   return createMemoryRouter(
     [

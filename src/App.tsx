@@ -40,15 +40,13 @@ export interface Movie {
   description: string;
 }
 
-export interface MovieDetails {
-  id: number;
-  name: string;
+export interface ApiMovieDetails extends Movie, ApiMovie {
   year?: number | '';
-  posterURL?: string;
-  description?: string;
+  movieLength: number;
   runtime?: number;
-  rating?: number;
-  genres?: string;
+  rating: { kp: number; imdb: number };
+  genres: { name: string }[];
+  poster: { previewUrl: string; url: string };
 }
 
 function App() {

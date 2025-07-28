@@ -1,5 +1,5 @@
 import { createBrowserRouter, redirect } from 'react-router';
-import App from './App';
+import App, { type ApiMovieDetails } from './App';
 import axiosService from './common/axiosService';
 import SearchResult from './components/SearchResult';
 import { ErrorMessage, NotFound } from './components/common';
@@ -45,10 +45,12 @@ export const router = createBrowserRouter([
                 const res = axiosService.getMovieDetails({
                   id: query,
                 });
-                const promise = new Promise((resolve) => {
-                  setTimeout(() => resolve(res), 1000);
-                });
-                return { promise };
+                const promise: Promise<ApiMovieDetails> = new Promise(
+                  (resolve) => {
+                    setTimeout(() => resolve(res), 1000);
+                  }
+                );
+                return promise;
               }
               return new Promise((reject) => reject('Movie Id is missing.'));
             },

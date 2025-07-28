@@ -17,11 +17,7 @@ describe('SearchResult', () => {
       <SearchResult />,
       mockLoaderData
     );
-    await renderAsync(
-      <RouterProvider router={RouterMock}>
-        <SearchResult />
-      </RouterProvider>
-    );
+    await renderAsync(<RouterProvider router={RouterMock} />);
 
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
@@ -41,29 +37,21 @@ describe('SearchResult', () => {
       <SearchResult />,
       mockLoaderData
     );
-    await renderAsync(
-      <RouterProvider router={RouterMock}>
-        <SearchResult />
-      </RouterProvider>
-    );
+    await renderAsync(<RouterProvider router={RouterMock} />);
     expect(screen.getByTestId('loader')).toBeInTheDocument();
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
   it('displays warning on error', async () => {
     const message = 'Failed to load results';
     const promise = Promise.reject(new Error(message));
+    await expect(promise).rejects.toThrow();
     mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = mockMemoryRouter(
       '/search',
       <SearchResult />,
       mockLoaderData
     );
-    await renderAsync(
-      <RouterProvider router={RouterMock}>
-        <SearchResult />
-      </RouterProvider>
-    );
-    await expect(promise).rejects.toThrow();
+    await renderAsync(<RouterProvider router={RouterMock} />);
     const errorMsg = screen.getByTestId('api-error');
     expect(errorMsg).toHaveAttribute(
       'class',
@@ -82,18 +70,15 @@ describe('SearchResult', () => {
     };
 
     const promise = Promise.reject(new ApiError(error));
+    await expect(promise).rejects.toThrow();
     mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = mockMemoryRouter(
       '/search',
       <SearchResult />,
       mockLoaderData
     );
-    await renderAsync(
-      <RouterProvider router={RouterMock}>
-        <SearchResult />
-      </RouterProvider>
-    );
-    await expect(promise).rejects.toThrow();
+    await renderAsync(<RouterProvider router={RouterMock} />);
+
     const errorMsg = screen.getByTestId('api-error');
     expect(errorMsg).toHaveAttribute(
       'class',
@@ -111,19 +96,14 @@ describe('SearchResult', () => {
       message: '',
     };
     const promise = Promise.reject(new ApiError(error));
+    await expect(promise).rejects.toThrow();
     mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = mockMemoryRouter(
       '/search',
       <SearchResult />,
       mockLoaderData
     );
-    await renderAsync(
-      <RouterProvider router={RouterMock}>
-        <SearchResult />
-      </RouterProvider>
-    );
-
-    await expect(promise).rejects.toThrow();
+    await renderAsync(<RouterProvider router={RouterMock} />);
     const errorMsg = screen.getByTestId('api-error');
     expect(errorMsg).toHaveAttribute(
       'class',

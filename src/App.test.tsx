@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import App from './App';
 import { moviesMock } from './__tests__/mocks';
 import { renderAsync } from './__tests__/setupTests';
@@ -8,14 +8,14 @@ import SearchResult from './components/SearchResult';
 import { ErrorMessage } from './components/common';
 import Search from './components/Search';
 
-vi.mock('axios');
-vi.mock('./common/axiosService');
-const mockLoaderData = vi.fn();
+// vi.mock('axios');
+// vi.mock('./common/axiosService');
+//const mockLoaderData = vi.fn();
 
 describe('App ', () => {
   it('renders correctly', async () => {
     const promise = Promise.resolve(moviesMock);
-    mockLoaderData.mockReturnValueOnce({ promise });
+    //mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = createMemoryRouter(
       [
         {
@@ -36,11 +36,7 @@ describe('App ', () => {
         initialEntries: ['/movies'],
       }
     );
-    await renderAsync(
-      <RouterProvider router={RouterMock}>
-        <App />
-      </RouterProvider>
-    );
+    await renderAsync(<RouterProvider router={RouterMock} />);
     const length = moviesMock.docs.length;
 
     expect(() => render(<App />)).not.toThrow();
@@ -57,7 +53,7 @@ describe('App ', () => {
     const promise = new Promise((resolve) =>
       setTimeout(() => resolve(moviesMock), 500)
     );
-    mockLoaderData.mockReturnValueOnce({ promise });
+    //mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = createMemoryRouter(
       [
         {
@@ -78,13 +74,7 @@ describe('App ', () => {
         initialEntries: ['/movies'],
       }
     );
-    await renderAsync(
-      <RouterProvider router={RouterMock}>
-        <App />
-      </RouterProvider>
-    );
-
-    render(<App />);
+    await renderAsync(<RouterProvider router={RouterMock} />);
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 });
