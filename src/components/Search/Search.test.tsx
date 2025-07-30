@@ -1,11 +1,20 @@
 import { render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import Search from './Search';
 import { setup } from '../../__tests__/setupTests';
 import { MemoryRouter } from 'react-router';
 
 const testVal = 'Avatar';
 const storageKey = 'searchTerm';
+const mockNavigate = vi.fn();
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 afterEach(() => {
   localStorage.clear();
@@ -53,7 +62,7 @@ describe('Search interaction', () => {
     );
     const input = screen.getByTestId('search-input');
     expect(input).toHaveValue('');
-    expect(localStorage.getItem(storageKey)).toBe(null);
+    expect(localStorage.getItem(storageKey)).toBe('');
     await ui.type(input, testVal);
     await ui.click(screen.getByTestId('search-button'));
     expect(localStorage.getItem(storageKey)).toBe(testVal);
@@ -80,6 +89,8 @@ describe('Search interaction', () => {
     );
     const button = screen.getByTestId('search-button');
     await ui.click(button);
-    //expect(mockCallback).toHaveBeenCalledWith(testVal);
+    expect(mockNavigate).toHaveBeenCalledWith(
+      expect.stringContaining(`search?query=${testVal}`)
+    );
   });
 });

@@ -7,8 +7,8 @@ import {
 } from 'react-router';
 import './index.css';
 import React from 'react';
-import Loader from '../components/Loader';
-import type { ApiMovieDetails } from '../App';
+import Loader from '../Loader';
+import type { ApiMovieDetails } from '../../App';
 
 function MovieDetails() {
   const [params] = useSearchParams();

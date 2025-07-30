@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { RouterProvider } from 'react-router';
-import { mockMemoryRouter, renderAsync } from '../__tests__/setupTests';
+import { mockMemoryRouter, renderAsync } from '../../__tests__/setupTests';
 import MovieDetails from './MovieDetails';
-import { detailsApiMock } from '../__tests__/mocks';
+import { detailsApiMock } from '../../__tests__/mocks';
 
 describe('MovieDetails', () => {
   it('renders details successfully', async () => {

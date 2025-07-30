@@ -3,7 +3,7 @@ import App, { type ApiMovieDetails } from './App';
 import axiosService from './common/axiosService';
 import SearchResult from './components/SearchResult';
 import { ErrorMessage, NotFound } from './components/common';
-import MovieDetails from './Details';
+import MovieDetails from './components/Details';
 import Search from './components/Search';
 
 export const router = createBrowserRouter([

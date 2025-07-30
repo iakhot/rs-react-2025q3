@@ -8,14 +8,9 @@ import SearchResult from './components/SearchResult';
 import { ErrorMessage } from './components/common';
 import Search from './components/Search';
 
-// vi.mock('axios');
-// vi.mock('./common/axiosService');
-//const mockLoaderData = vi.fn();
-
 describe('App ', () => {
   it('renders correctly', async () => {
     const promise = Promise.resolve(moviesMock);
-    //mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = createMemoryRouter(
       [
         {
@@ -53,7 +48,6 @@ describe('App ', () => {
     const promise = new Promise((resolve) =>
       setTimeout(() => resolve(moviesMock), 500)
     );
-    //mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = createMemoryRouter(
       [
         {

@@ -1,13 +1,19 @@
+import { useEffect, useState } from 'react';
+
 type UseLocalStorageReturn = [string, (value: string) => void];
 
 export function useLocalStorage(
   key: string,
   defaultValue = ''
 ): UseLocalStorageReturn {
-  const saved = localStorage.getItem(key);
-  const value = saved ?? defaultValue;
-  const setWrapper = (value: string) => {
+  const [value, setValue] = useState(() => {
+    const saved = localStorage.getItem(key);
+    return saved ?? defaultValue;
+  });
+
+  useEffect(() => {
     localStorage.setItem(key, value.trim());
-  };
-  return [value, setWrapper];
+  }, [value, key]);
+
+  return [value, setValue];
 }

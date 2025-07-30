@@ -19,6 +19,7 @@ function Pagination({
   const handleClick = (page: number) => {
     setSearchParams((params) => {
       params.set('page', String(page));
+      params.delete('details');
       return params;
     });
   };
