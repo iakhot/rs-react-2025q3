@@ -1,46 +1,84 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { moviesList } from '../../__tests__/mocks';
+import { screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { moviesMock } from '../../__tests__/mocks';
 import SearchResult from './SearchResult';
+import { RouterProvider } from 'react-router';
+import { mockMemoryRouter, renderAsync } from '../../__tests__/setupTests';
+import { ApiError } from '../../App';
+
+const mockLoaderData = vi.fn();
 
 describe('SearchResult', () => {
-  it('renders results if successful', () => {
-    render(
-      <SearchResult isLoading={false} results={moviesList} error={null} />
+  it('renders results if successful', async () => {
+    const promise = Promise.resolve(moviesMock);
+    mockLoaderData.mockReturnValueOnce({ promise });
+    const RouterMock = mockMemoryRouter(
+      '/search',
+      <SearchResult />,
+      mockLoaderData
     );
+    await renderAsync(<RouterProvider router={RouterMock} />);
+
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
-    const length = moviesList.length;
+    const length = moviesMock.docs.length;
     const names = screen.getAllByTestId('card-name');
     const descriptions = screen.getAllByTestId('card-description');
     expect(names).toHaveLength(length);
     expect(descriptions).toHaveLength(length);
   });
-  it('displays loader while fetching', () => {
-    render(<SearchResult isLoading={true} results={[]} error={null} />);
+  it('displays loader while fetching', async () => {
+    const promise = new Promise((resolve) =>
+      setTimeout(() => resolve(moviesMock), 500)
+    );
+    mockLoaderData.mockReturnValueOnce({ promise });
+    const RouterMock = mockMemoryRouter(
+      '/search',
+      <SearchResult />,
+      mockLoaderData
+    );
+    await renderAsync(<RouterProvider router={RouterMock} />);
     expect(screen.getByTestId('loader')).toBeInTheDocument();
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
-  it('displays warning on error', () => {
-    const error = new Error('Failed to load results');
-    render(<SearchResult isLoading={false} results={[]} error={error} />);
+  it('displays warning on error', async () => {
+    const message = 'Failed to load results';
+    const promise = Promise.reject(new Error(message));
+    await expect(promise).rejects.toThrow();
+    mockLoaderData.mockReturnValueOnce({ promise });
+    const RouterMock = mockMemoryRouter(
+      '/search',
+      <SearchResult />,
+      mockLoaderData
+    );
+    await renderAsync(<RouterProvider router={RouterMock} />);
     const errorMsg = screen.getByTestId('api-error');
     expect(errorMsg).toHaveAttribute(
       'class',
       expect.stringContaining('warning')
     );
     expect(errorMsg.textContent).toContain(
-      `An error has occurred while loading the data:${error.message}`
+      `An error has occurred while loading the data:${message}`
     );
   });
-  it('displays warning on 500 error', () => {
-    const error = {
+  it('displays warning on 500 error', async () => {
+    const error: ApiError = {
       status: 500,
       statusText: 'Internal Server error',
       name: '',
       message: '',
     };
-    render(<SearchResult isLoading={false} results={[]} error={error} />);
+
+    const promise = Promise.reject(new ApiError(error));
+    await expect(promise).rejects.toThrow();
+    mockLoaderData.mockReturnValueOnce({ promise });
+    const RouterMock = mockMemoryRouter(
+      '/search',
+      <SearchResult />,
+      mockLoaderData
+    );
+    await renderAsync(<RouterProvider router={RouterMock} />);
+
     const errorMsg = screen.getByTestId('api-error');
     expect(errorMsg).toHaveAttribute(
       'class',
@@ -50,14 +88,22 @@ describe('SearchResult', () => {
       `An error has occurred while loading the data:Server side error: ${error.status} ${error.statusText}`
     );
   });
-  it('displays warning on 400 error', () => {
-    const error = {
+  it('displays warning on 400 error', async () => {
+    const error: ApiError = {
       status: 404,
       statusText: 'Not found',
       name: '',
       message: '',
     };
-    render(<SearchResult isLoading={false} results={[]} error={error} />);
+    const promise = Promise.reject(new ApiError(error));
+    await expect(promise).rejects.toThrow();
+    mockLoaderData.mockReturnValueOnce({ promise });
+    const RouterMock = mockMemoryRouter(
+      '/search',
+      <SearchResult />,
+      mockLoaderData
+    );
+    await renderAsync(<RouterProvider router={RouterMock} />);
     const errorMsg = screen.getByTestId('api-error');
     expect(errorMsg).toHaveAttribute(
       'class',

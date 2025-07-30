@@ -88,3 +88,19 @@ button:focus-visible {
 .float-right {
   float: right;
 }
+
+.flex-main {
+  flex: 1 0 auto;
+}
+
+.flex-row {
+  flex-flow: row;
+}
+
+.flex-column {
+  flex-flow: column;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}

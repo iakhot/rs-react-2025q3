@@ -1,0 +1,46 @@
+.details {
+  flex: 0 1 auto;
+  margin: 0 20px;
+  color: white;
+}
+
+.details > img {
+  width: 200px;
+  height: auto;
+  max-width: 200px;
+  max-height: 300px;
+}
+
+.details-column {
+  flex: 0 1 auto;
+  flex-flow: column nowrap;
+}
+
+.movie-tilte {
+  color: #747bff;
+  text-transform: capitalize;
+  font-weight: bold;
+  font-size: x-large;
+  margin-right: 10px;
+}
+
+.rating-border {
+  border-radius: 50%;
+  border: 2px groove #646cff;
+  font-size: 12px;
+  padding: 7px;
+}
+
+.timings {
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.timings > span {
+  margin-right: 30px;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+}

@@ -1,10 +1,7 @@
 import './App.css';
-import ErrorButton from './components/ErrorButton';
+import ErrorBoundary from './components/ErrorBoundary';
 import Search from './components/Search';
-import React from 'react';
-import AxiosService from './common/axiosService';
-import SearchResult from './components/SearchResult';
-import type { AxiosError } from 'axios';
+import { Outlet } from 'react-router';
 
 export interface SearchResults {
   results: Movie[];
@@ -13,7 +10,11 @@ export interface SearchResults {
 }
 
 export interface ApiResult {
-  docs: ApiMovie[];
+  docs: ApiMovie[] | Movie[];
+  total: number;
+  limit: number;
+  page: number;
+  pages: number;
 }
 
 export interface ApiMovie extends Movie {
@@ -21,7 +22,14 @@ export interface ApiMovie extends Movie {
   alternativeName?: string;
 }
 
-export interface ApiError extends Error {
+export class ApiError extends Error {
+  constructor(props: ApiError) {
+    super(props.message);
+    this.status = props.status;
+    this.statusText = props.statusText;
+    this.name = props.name;
+    this.stack = props.stack;
+  }
   status?: number;
   statusText?: string;
 }
@@ -32,73 +40,22 @@ export interface Movie {
   description: string;
 }
 
-class App extends React.Component<object, SearchResults> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      results: [],
-      isLoading: false,
-      error: null,
-    };
-    this.loadData = this.loadData.bind(this);
-  }
+export interface ApiMovieDetails extends Movie, ApiMovie {
+  year?: number | '';
+  movieLength: number;
+  runtime?: number;
+  rating: { kp: number; imdb: number };
+  genres: { name: string }[];
+  poster: { previewUrl: string; url: string };
+}
 
-  componentWillUnmount(): void {
-    this.setState({ results: [] });
-  }
-
-  convertData(results: ApiMovie[]): Movie[] {
-    return results.map((movie) => {
-      return {
-        id: movie.id,
-        name: movie.name ? movie.name : movie.alternativeName,
-        description: movie.description
-          ? movie.description
-          : movie.shortDescription,
-      } as Movie;
-    });
-  }
-
-  loadData(term: string) {
-    this.setState({ isLoading: true });
-    this.setState({ error: null });
-    AxiosService.getMovies({ searchTerm: term })
-      .then((res) => {
-        const data = res?.data as ApiResult;
-        console.log(data);
-        const movies = this.convertData(data.docs);
-        this.setState({ results: movies });
-      })
-      .catch((error: AxiosError) => {
-        this.setState({
-          error: {
-            message: error.message,
-            name: error.name,
-            status: error.response?.status,
-            statusText: error.response?.statusText,
-          },
-        });
-      })
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
-  }
-
-  render() {
-    return (
-      <>
-        <Search onSearch={this.loadData} />
-        <SearchResult
-          isLoading={this.state.isLoading}
-          results={this.state.results}
-          error={this.state.error}
-        />
-        <div className="card">
-          <ErrorButton />
-        </div>
-      </>
-    );
-  }
+function App() {
+  return (
+    <ErrorBoundary>
+      <Search />
+      <Outlet />
+    </ErrorBoundary>
+  );
 }
 
 export default App;

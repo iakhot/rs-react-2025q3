@@ -1,4 +1,5 @@
 #root {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -11,4 +12,39 @@
 
 .warning {
   color: #ffcc00;
+}
+
+.min-vh70 {
+  min-height: 70vh;
+}
+
+.min-vw50 {
+  min-width: 50vw;
+}
+
+.flex-child-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-main {
+  flex: 1 0 auto;
+}
+
+.flex-row {
+  flex-flow: row;
+}
+
+.flex-column {
+  flex-flow: column;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.center {
+  align-items: anchor-center;
+  display: flex;
+  justify-content: center;
 }
