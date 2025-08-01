@@ -35,11 +35,11 @@ export class ApiError extends Error {
   statusText?: string;
 }
 
-// export interface Movie {
-//   id: number;
-//   name: string;
-//   description: string;
-// }
+export interface Movie {
+  id: number;
+  name: string;
+  description: string;
+}
 
 export interface ApiMovieDetails extends Movie, ApiMovie {
   year?: number | '';

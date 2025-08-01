@@ -1,12 +1,11 @@
 import { NavLink, useSearchParams } from 'react-router';
 import { type Movie } from '../../App';
 import { useAppDispatch } from '../../common/hooks';
-import { selectMovie, deselectMovie } from './selectedSlice';
-import React, { useState } from 'react';
+import { selectMovie, unselectMovie } from './selectedSlice';
+import React from 'react';
 
 function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
   const dispatch = useAppDispatch();
-  const [isSelected, setIsSelected] = useState(selected);
   const [query] = useSearchParams();
   const newQuery = new URLSearchParams(query);
   newQuery.set('details', String(movie.id));
@@ -22,12 +21,10 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
   ) => {
     const checked = event.target.checked;
     if (dispatch) {
-      setIsSelected(checked);
-      console.log(`======= CARD ==== id ${movie.id} is sel ${checked}`);
       if (checked) {
         dispatch(selectMovie(movie));
       } else {
-        dispatch(deselectMovie(movie.id));
+        dispatch(unselectMovie(movie.id));
       }
     }
   };
@@ -37,7 +34,7 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
       <div data-testid="card-selected">
         <input
           type="checkbox"
-          checked={isSelected}
+          checked={selected}
           title="movie-selected"
           onChange={(e) => handleSelect(movie, e)}
         />

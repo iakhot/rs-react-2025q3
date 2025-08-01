@@ -21,16 +21,20 @@ export const selectedSlice = createSlice({
         `=======STORE ADD ====== ${action.payload} == ${state.selectedMovies.join(`, `)}`
       );
     },
-    deselectMovie: (state, action: PayloadAction<number>) => {
+    unselectMovie: (state, action: PayloadAction<number>) => {
       state.selectedMovies = state.selectedMovies.filter(
         (m) => m.id !== action.payload
       );
       console.log(`=======STORE DEL ====== id ${action.payload} `);
     },
+    unselectAll: (state) => {
+      state.selectedMovies = [];
+    },
   },
 });
 
-export const { selectMovie, deselectMovie } = selectedSlice.actions;
+export const { selectMovie, unselectMovie, unselectAll } =
+  selectedSlice.actions;
 
 export default selectedSlice.reducer;
 
@@ -38,9 +42,6 @@ export default selectedSlice.reducer;
 
 export const selectedMovies = (state: RootState) =>
   state.selectedMovies.selectedMovies;
-export const selectedMovieIds = createSelector(
-  [(state: RootState) => state.selectedMovies.selectedMovies],
-  (movies) => {
-    return movies.map((m) => m.id);
-  }
-);
+export const selectedMovieIds = createSelector(selectedMovies, (movies) => {
+  return movies.map((m) => m.id);
+});

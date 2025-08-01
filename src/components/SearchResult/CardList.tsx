@@ -5,6 +5,7 @@ import './index.css';
 import Pagination from './Pagination';
 import { useAppSelector } from '../../common/hooks';
 import { selectedMovieIds } from './selectedSlice';
+import { DownloadSelected } from '../common';
 
 const CardList = memo(function CardList({ items }: { items: ApiResult }) {
   const { docs, pages, page } = items;
@@ -28,6 +29,7 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
               );
             })}
           </div>
+          {selectedIds.length > 0 ? <DownloadSelected /> : null}
           {pages > 1 ? <Pagination pages={10} current={page} /> : null}
         </div>
       ) : (
