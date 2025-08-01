@@ -2,6 +2,7 @@ import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
 import Search from './components/Search';
 import { Outlet } from 'react-router';
+import type { Movie } from './components/SearchResult/moviesSlice';
 
 export interface SearchResults {
   results: Movie[];
@@ -34,11 +35,11 @@ export class ApiError extends Error {
   statusText?: string;
 }
 
-export interface Movie {
-  id: number;
-  name: string;
-  description: string;
-}
+// export interface Movie {
+//   id: number;
+//   name: string;
+//   description: string;
+// }
 
 export interface ApiMovieDetails extends Movie, ApiMovie {
   year?: number | '';
