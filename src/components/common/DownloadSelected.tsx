@@ -4,7 +4,7 @@ import { formatCsv } from '../../common/utils';
 import { unselectAll, selectedMovies } from '../SearchResult/selectedSlice';
 import './index.css';
 
-export function DownloadSelected() {
+export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
   const dispatch = useAppDispatch();
   const selectedObj = useAppSelector(selectedMovies);
 
@@ -28,7 +28,12 @@ export function DownloadSelected() {
   };
 
   return (
-    <details open id="download-selected" className="flyout float-left">
+    <details
+      open
+      id="download-selected"
+      className="flyout float-left"
+      style={{ visibility: hidden ? 'hidden' : 'visible' }}
+    >
       <summary>{selectedObj.length} movies selected</summary>
       <p>
         <button title="Unselect all" onClick={handleUnselect}>

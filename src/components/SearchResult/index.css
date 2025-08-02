@@ -9,19 +9,28 @@
   display: grid;
   grid-template-rows: 30px;
   grid-auto-rows: 70px;
-  grid-template-columns: 1fr 2fr 3fr;
+  grid-template-columns: 3em 2fr 3fr;
   overflow-y: auto;
 }
 
 .item {
   position: relative;
-}
-.item:nth-of-type(odd) {
   border-right: 2px solid #333333;
+
+  input[type='checkbox'] {
+    scale: 1.5;
+    accent-color: #747bff;
+  }
 }
-.item:not(:nth-of-type(-n + 2)) {
+.item:nth-of-type(3n) {
+  border: none;
+}
+.item:not(:nth-of-type(-n + 3)) {
   padding-top: 20px;
   padding-left: 20px;
+}
+.item:nth-child(3n + 1) {
+  padding-left: 0;
 }
 
 .fw600 {

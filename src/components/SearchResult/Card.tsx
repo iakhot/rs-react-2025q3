@@ -31,7 +31,7 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
 
   return (
     <>
-      <div data-testid="card-selected">
+      <div data-testid="card-selected" className="item descr text-center">
         <input
           type="checkbox"
           checked={selected}

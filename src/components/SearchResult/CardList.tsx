@@ -30,7 +30,7 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
             })}
           </div>
           <div className="card flex-child-container flex-row">
-            {selectedIds.length > 0 ? <DownloadSelected /> : null}
+            <DownloadSelected hidden={selectedIds.length == 0} />
             {pages > 1 ? <Pagination pages={10} current={page} /> : null}
           </div>
         </div>
