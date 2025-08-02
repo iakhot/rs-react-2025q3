@@ -3,7 +3,7 @@ import { type ApiResult, ApiError, type ApiMovieDetails } from '../App';
 //import * as utils from './utils';
 import { moviesMock } from '../__tests__/mocks';
 
-const apiUrl = 'https://api.kinopoisk.dev/v1.4';
+export const apiUrl = 'https://api.kinopoisk.dev/v1.4';
 const token = 'CZA38XR-FRA4EH3-KAPJRZ8-C3S9DZ8';
 
 interface SearchParams {

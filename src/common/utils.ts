@@ -1,4 +1,5 @@
 import type { ApiError, ApiMovie, Movie } from '../App';
+import { apiUrl } from './axiosService';
 
 export const composeErrorMessage = (error: ApiError): string => {
   if (error.status) {
@@ -22,4 +23,16 @@ export const convertData = (results: ApiMovie[]): Movie[] => {
         : movie.shortDescription,
     } as Movie;
   });
+};
+
+const getDetailsUrl = (movieId: number) => {
+  return `${apiUrl}/movie/${movieId}`;
+};
+
+export const formatCsv = (movies: Movie[]) => {
+  const headers = [...Object.keys(movies[0]), 'detailsURL'].join(',');
+  const rows = movies.map((movie) =>
+    [...Object.values(movie), getDetailsUrl(movie.id)].join(',')
+  );
+  return [headers, ...rows].join('\n');
 };

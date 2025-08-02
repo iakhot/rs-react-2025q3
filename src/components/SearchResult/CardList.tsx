@@ -29,8 +29,10 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
               );
             })}
           </div>
-          {selectedIds.length > 0 ? <DownloadSelected /> : null}
-          {pages > 1 ? <Pagination pages={10} current={page} /> : null}
+          <div className="card flex-child-container flex-row">
+            {selectedIds.length > 0 ? <DownloadSelected /> : null}
+            {pages > 1 ? <Pagination pages={10} current={page} /> : null}
+          </div>
         </div>
       ) : (
         <p className="text-center">Nothing found, try another search term...</p>

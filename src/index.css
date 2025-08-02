@@ -89,6 +89,10 @@ button:focus-visible {
   float: right;
 }
 
+.float-left {
+  float: left;
+}
+
 .flex-main {
   flex: 1 0 auto;
 }

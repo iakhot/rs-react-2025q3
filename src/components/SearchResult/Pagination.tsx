@@ -25,7 +25,7 @@ function Pagination({
   };
 
   return (
-    <nav className="card">
+    <nav>
       <ul className="paging">
         {[...arr].map((i) => {
           return (
