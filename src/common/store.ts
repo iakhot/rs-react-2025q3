@@ -1,14 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import selectedReducer from '../components/SearchResult/selectedSlice';
 
-export const store = configureStore({
-  reducer: {
-    selectedMovies: selectedReducer,
-  },
+const rootReducer = combineReducers({
+  selectedMovies: selectedReducer,
 });
 
-// Infer the type of `store`
-export type AppStore = typeof store;
-export type RootState = ReturnType<AppStore['getState']>;
-// Infer the `AppDispatch` type from the store itself
+export const setupStore = (preloadedState?: Partial<RootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+};
+
+export type AppStore = ReturnType<typeof setupStore>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = AppStore['dispatch'];

@@ -19,7 +19,7 @@ export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
       type: 'text/plain;charset=utf-8',
     });
     const filename = `${movies.length}_best_movies.csv`;
-    saveFileDialog(blob, filename);
+    await saveFileDialog(blob, filename);
   };
 
   return (

@@ -6,10 +6,11 @@ import {
   type FocusEvent,
 } from 'react';
 import './index.css';
-import { useLocalStorage } from '../../common/hooks';
+import { useAppDispatch, useLocalStorage } from '../../common/hooks';
 import { useNavigate } from 'react-router';
 import ThemeToggle from './ThemeToggle';
 import { ThemeContext } from '../../context/ThemeContext';
+import { unselectAll } from '../SearchResult/selectedSlice';
 
 const getQueryString = (value: string): string => {
   return encodeURI(`search?query=${value}&page=1`);
@@ -20,6 +21,7 @@ function Search() {
   const [savedTerm, saveTerm] = useLocalStorage('searchTerm');
   const [term, setTerm] = useState(savedTerm);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     navigate(getQueryString(term));
@@ -29,6 +31,7 @@ function Search() {
     if (value !== undefined) {
       const term = value !== '' ? value.trim() : '';
       saveTerm(term);
+      dispatch(unselectAll());
       navigate(getQueryString(term));
     }
   };

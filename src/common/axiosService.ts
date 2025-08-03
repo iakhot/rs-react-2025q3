@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { type ApiResult, ApiError, type ApiMovieDetails } from '../App';
-//import * as utils from './utils';
-import { moviesMock } from '../__tests__/mocks';
+import * as utils from './utils';
 
 export const apiUrl = 'https://api.kinopoisk.dev/v1.4';
 const token = 'CZA38XR-FRA4EH3-KAPJRZ8-C3S9DZ8';
@@ -22,29 +21,21 @@ class AxiosService {
       })
       .then((response) => response);
 
-  getMovies = ({ limit = 4, pageNumber = 1 }: SearchParams) =>
-    Promise.resolve({
-      docs: moviesMock.docs.slice(
-        (pageNumber - 1) * limit,
-        (pageNumber - 1) * limit + limit
-      ),
-      page: pageNumber,
-      pages: 2,
-    } as ApiResult)
-      // this.getRequest(
-      //     `${apiUrl}/movie/search?query=${searchTerm}&limit=${limit}&page=${pageNumber}`
-      // )
-      //     .then((res) => {
-      //         const data = res?.data as ApiResult;
-      //         const movies = utils.convertData(data.docs);
-      //         return {
-      //             docs: movies,
-      //             total: data.total,
-      //             limit: data.limit,
-      //             page: data.page,
-      //             pages: data.pages,
-      //         } as ApiResult;
-      //     })
+  getMovies = ({ searchTerm, limit = 5, pageNumber = 1 }: SearchParams) =>
+    this.getRequest(
+      `${apiUrl}/movie/search?query=${searchTerm}&limit=${limit}&page=${pageNumber}`
+    )
+      .then((res) => {
+        const data = res?.data as ApiResult;
+        const movies = utils.convertData(data.docs);
+        return {
+          docs: movies,
+          total: data.total,
+          limit: data.limit,
+          page: data.page,
+          pages: data.pages,
+        } as ApiResult;
+      })
       .catch((error: AxiosError) => {
         const apiError: ApiError = {
           message: error.message,

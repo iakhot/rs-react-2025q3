@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../common/store';
-import type { Movie } from './moviesSlice';
+import type { Movie } from '../../App';
 
 export interface SelectedState {
   selectedMovies: Array<Movie>;
@@ -17,15 +17,11 @@ export const selectedSlice = createSlice({
   reducers: {
     selectMovie: (state, action: PayloadAction<Movie>) => {
       state.selectedMovies.push(action.payload);
-      console.log(
-        `=======STORE ADD ====== ${action.payload} == ${state.selectedMovies.join(`, `)}`
-      );
     },
     unselectMovie: (state, action: PayloadAction<number>) => {
       state.selectedMovies = state.selectedMovies.filter(
         (m) => m.id !== action.payload
       );
-      console.log(`=======STORE DEL ====== id ${action.payload} `);
     },
     unselectAll: (state) => {
       state.selectedMovies = [];

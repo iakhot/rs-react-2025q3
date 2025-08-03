@@ -2,8 +2,7 @@ import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
 import Search from './components/Search';
 import { Outlet } from 'react-router';
-import type { Movie } from './components/SearchResult/moviesSlice';
-import ThemeContextProvider from './context/themeContext';
+import ThemeContextProvider from './context/ThemeContext';
 
 export interface SearchResults {
   results: Movie[];

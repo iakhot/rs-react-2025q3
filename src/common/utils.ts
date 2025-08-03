@@ -60,6 +60,6 @@ export const saveFileDialog = async (content: Blob, filename: string) => {
       writable?.close();
     }
   } else {
-    throw Error('File download is not supported by your browser.');
+    console.log('File download is not supported by your browser.');
   }
 };

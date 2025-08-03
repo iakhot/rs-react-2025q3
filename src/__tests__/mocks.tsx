@@ -114,3 +114,11 @@ export function mockResponse(data: ApiMovie[] | Movie[]): ApiResult {
     page: 0,
   };
 }
+
+export const ApiMovieStub: ApiMovieDetails = {
+  ...movieStub,
+  movieLength: 120,
+  rating: { kp: 8, imdb: 8.5 },
+  genres: [{ name: 'драма' }],
+  poster: { previewUrl: '', url: '' },
+};
