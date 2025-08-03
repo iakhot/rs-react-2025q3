@@ -33,8 +33,6 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
   return (
     <>
       <div data-testid="card-selected" className="item descr text-center">
-        {/* <label className="custom-checkbox"> */}
-
         <input
           type="checkbox"
           checked={selected}
@@ -42,9 +40,6 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
           className={`${currentTheme}`}
           onChange={(e) => handleSelect(movie, e)}
         />
-
-        {/* <span className="checkmark"></span>
-        </label> */}
       </div>
       <div data-testid="card-name" className="item descr text-center">
         <NavLink

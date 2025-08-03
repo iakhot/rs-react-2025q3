@@ -36,3 +36,30 @@ export const formatCsv = (movies: Movie[]) => {
   );
   return [headers, ...rows].join('\n');
 };
+
+export const saveFileDialog = async (content: Blob, filename: string) => {
+  if (window.showSaveFilePicker) {
+    const opts: SaveFilePickerOptions = {
+      suggestedName: filename,
+      types: [
+        {
+          description: 'Text file',
+          accept: { 'text/csv': ['.csv'] },
+        },
+      ],
+    };
+    let writable = null;
+    try {
+      const handle = await window.showSaveFilePicker(opts);
+      writable = await handle.createWritable();
+      await writable.write(content);
+    } catch (error) {
+      console.log(`An error occurred downloading a file: ${error}`);
+      return null;
+    } finally {
+      writable?.close();
+    }
+  } else {
+    throw Error('File download is not supported by your browser.');
+  }
+};
