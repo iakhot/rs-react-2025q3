@@ -19,9 +19,25 @@
 
   input[type='checkbox'] {
     scale: 1.5;
-    accent-color: #747bff;
+    border-radius: 4px;
+    background: #ccc;
+    appearance: none;
+    width: 15px !important;
+    height: 15px !important;
+    background: #3b3b3b;
+  }
+
+  input[type='checkbox'].light {
+    background-color: #ccc;
+  }
+
+  input[type='checkbox']:checked {
+    background-color: #747bff;
+    background-image: url('/public/icons8-checkmark.svg');
+    background-size: cover;
   }
 }
+
 .item:nth-of-type(3n) {
   border: none;
 }
@@ -62,6 +78,7 @@ nav {
     height: 2rem;
     padding: 0 3px;
     margin: 0 3px;
+    border: 0;
   }
   .selected {
     background-color: #747bff;
@@ -82,6 +99,9 @@ nav {
 
 .movie-link {
   color: white;
+}
+.movie-link.light {
+  color: #242424;
 }
 
 .movie-link.active {

@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router';
+import { useTheme } from '../../common/hooks';
 
 function Pagination({
   pages = 10,
@@ -7,6 +8,7 @@ function Pagination({
   pages: number;
   current: number;
 }) {
+  const { currentTheme } = useTheme();
   const [, setSearchParams] = useSearchParams();
   const range = (start: number, stop: number, step: number): number[] =>
     Array.from(
@@ -38,7 +40,7 @@ function Pagination({
                   {i}
                 </button>
               ) : (
-                <button className="button" onClick={() => handleClick(i)}>
+                <button className={currentTheme} onClick={() => handleClick(i)}>
                   {i}
                 </button>
               )}

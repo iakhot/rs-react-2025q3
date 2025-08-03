@@ -1,10 +1,11 @@
 import type { Movie } from '../../App';
-import { useAppDispatch, useAppSelector } from '../../common/hooks';
+import { useAppDispatch, useAppSelector, useTheme } from '../../common/hooks';
 import { formatCsv } from '../../common/utils';
 import { unselectAll, selectedMovies } from '../SearchResult/selectedSlice';
 import './index.css';
 
 export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
+  const { currentTheme } = useTheme();
   const dispatch = useAppDispatch();
   const selectedObj = useAppSelector(selectedMovies);
 
@@ -36,12 +37,20 @@ export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
     >
       <summary>{selectedObj.length} movies selected</summary>
       <p>
-        <button title="Unselect all" onClick={handleUnselect}>
+        <button
+          title="Unselect all"
+          onClick={handleUnselect}
+          className={currentTheme}
+        >
           Unselect all
         </button>
       </p>
       <p>
-        <button title="Download" onClick={() => handleDownload(selectedObj)}>
+        <button
+          title="Download"
+          onClick={() => handleDownload(selectedObj)}
+          className={currentTheme}
+        >
           Download
         </button>
       </p>

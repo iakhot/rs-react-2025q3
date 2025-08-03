@@ -1,13 +1,22 @@
-import { useEffect, useState, type ChangeEvent, type FocusEvent } from 'react';
+import {
+  useContext,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FocusEvent,
+} from 'react';
 import './index.css';
 import { useLocalStorage } from '../../common/hooks';
 import { useNavigate } from 'react-router';
+import ThemeToggle from './ThemeToggle';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const getQueryString = (value: string): string => {
   return encodeURI(`search?query=${value}&page=1`);
 };
 
 function Search() {
+  const { currentTheme } = useContext(ThemeContext);
   const [savedTerm, saveTerm] = useLocalStorage('searchTerm');
   const [term, setTerm] = useState(savedTerm);
   const navigate = useNavigate();
@@ -29,7 +38,7 @@ function Search() {
       <input
         id="searchTerm"
         data-testid="search-input"
-        className="search-input"
+        className={`search-input input-${currentTheme}`}
         value={term}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setTerm(e.currentTarget.value)
@@ -44,9 +53,11 @@ function Search() {
         onClick={() => handleSearchClick(term)}
         aria-label="Search button"
         title="Search"
+        className={`search-button ${currentTheme}`}
       >
         {'Search'}
       </button>
+      <ThemeToggle />
     </div>
   );
 }
