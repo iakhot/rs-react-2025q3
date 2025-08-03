@@ -1,31 +1,42 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { moviesMock } from '../../__tests__/mocks';
 import SearchResult from './SearchResult';
 import { RouterProvider } from 'react-router';
 import { mockMemoryRouter, renderAsync } from '../../__tests__/setupTests';
+import { setupStore } from '../../common/store';
+import { Provider } from 'react-redux';
 import { ApiError } from '../../App';
 
 const mockLoaderData = vi.fn();
 
 describe('SearchResult', () => {
   it('renders results if successful', async () => {
-    const promise = Promise.resolve(moviesMock);
+    const promise = new Promise((resolve) =>
+      setTimeout(() => resolve(moviesMock), 500)
+    );
     mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = mockMemoryRouter(
       '/search',
       <SearchResult />,
       mockLoaderData
     );
-    await renderAsync(<RouterProvider router={RouterMock} />);
-
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Description')).toBeInTheDocument();
-    const length = moviesMock.docs.length;
-    const names = screen.getAllByTestId('card-name');
-    const descriptions = screen.getAllByTestId('card-description');
-    expect(names).toHaveLength(length);
-    expect(descriptions).toHaveLength(length);
+    const store = setupStore();
+    await renderAsync(
+      <Provider store={store}>
+        <RouterProvider router={RouterMock} />
+      </Provider>
+    );
+    expect(screen.getByTestId('search-result')).toBeInTheDocument();
+    waitFor(() => {
+      expect(screen.getByText('Name')).toBeInTheDocument();
+      expect(screen.getByText('Description')).toBeInTheDocument();
+      const length = moviesMock.docs.length;
+      const names = screen.getAllByTestId('card-name');
+      const descriptions = screen.getAllByTestId('card-description');
+      expect(names).toHaveLength(length);
+      expect(descriptions).toHaveLength(length);
+    });
   });
   it('displays loader while fetching', async () => {
     const promise = new Promise((resolve) =>

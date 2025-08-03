@@ -7,6 +7,8 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import SearchResult from './components/SearchResult';
 import { ErrorMessage } from './components/common';
 import Search from './components/Search';
+import { setupStore } from './common/store';
+import { Provider } from 'react-redux';
 
 describe('App ', () => {
   it('renders correctly', async () => {
@@ -31,7 +33,12 @@ describe('App ', () => {
         initialEntries: ['/movies'],
       }
     );
-    await renderAsync(<RouterProvider router={RouterMock} />);
+    const store = setupStore();
+    await renderAsync(
+      <Provider store={store}>
+        <RouterProvider router={RouterMock} />
+      </Provider>
+    );
     const length = moviesMock.docs.length;
 
     expect(() => render(<App />)).not.toThrow();
@@ -68,7 +75,12 @@ describe('App ', () => {
         initialEntries: ['/movies'],
       }
     );
-    await renderAsync(<RouterProvider router={RouterMock} />);
+    const store = setupStore();
+    await renderAsync(
+      <Provider store={store}>
+        <RouterProvider router={RouterMock} />
+      </Provider>
+    );
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 });

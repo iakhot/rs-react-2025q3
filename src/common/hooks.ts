@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from './store';
+import { ThemeContext } from '../context/ThemeContext';
 
 type UseLocalStorageReturn = [string, (value: string) => void];
 
@@ -16,4 +19,10 @@ export function useLocalStorage(
   }, [value, key]);
 
   return [value, setValue];
+}
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
+export function useTheme() {
+  return use(ThemeContext);
 }

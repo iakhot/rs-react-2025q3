@@ -1,4 +1,5 @@
 import type { ApiError, ApiMovie, Movie } from '../App';
+import { apiUrl } from './axiosService';
 
 export const composeErrorMessage = (error: ApiError): string => {
   if (error.status) {
@@ -22,4 +23,43 @@ export const convertData = (results: ApiMovie[]): Movie[] => {
         : movie.shortDescription,
     } as Movie;
   });
+};
+
+const getDetailsUrl = (movieId: number) => {
+  return `${apiUrl}/movie/${movieId}`;
+};
+
+export const formatCsv = (movies: Movie[]) => {
+  const headers = [...Object.keys(movies[0]), 'detailsURL'].join(',');
+  const rows = movies.map((movie) =>
+    [...Object.values(movie), getDetailsUrl(movie.id)].join(',')
+  );
+  return [headers, ...rows].join('\n');
+};
+
+export const saveFileDialog = async (content: Blob, filename: string) => {
+  if (window.showSaveFilePicker) {
+    const opts: SaveFilePickerOptions = {
+      suggestedName: filename,
+      types: [
+        {
+          description: 'Text file',
+          accept: { 'text/csv': ['.csv'] },
+        },
+      ],
+    };
+    let writable = null;
+    try {
+      const handle = await window.showSaveFilePicker(opts);
+      writable = await handle.createWritable();
+      await writable.write(content);
+    } catch (error) {
+      console.log(`An error occurred downloading a file: ${error}`);
+      return null;
+    } finally {
+      writable?.close();
+    }
+  } else {
+    console.log('File download is not supported by your browser.');
+  }
 };

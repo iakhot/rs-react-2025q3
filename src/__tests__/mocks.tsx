@@ -46,6 +46,22 @@ export const moviesList: Movie[] = [
     description:
       'Роман Энакина и Падме в преддверии битвы андроидов, клонов и джедаев. Самая романтичная часть космической саги',
   },
+  {
+    id: 338,
+    name: 'Звёздные войны: Эпизод 5 — Империя наносит ответный удар',
+    description: 'Star Wars: Episode V - The Empire Strikes Back',
+  },
+  {
+    id: 447,
+    name: 'Звёздные войны: Эпизод 6 — Возвращение Джедая',
+    description: 'Star Wars: Episode VI - Return of the Jedi',
+  },
+  {
+    id: 714888,
+    name: 'Звёздные войны: Пробуждение силы',
+    description: 'Star Wars: Episode VII - The Force Awakens',
+  },
+  { id: 1209850, name: 'Андор', description: 'Andor' },
 ];
 
 export const detailsApiMock: ApiMovieDetails = {
@@ -98,3 +114,11 @@ export function mockResponse(data: ApiMovie[] | Movie[]): ApiResult {
     page: 0,
   };
 }
+
+export const ApiMovieStub: ApiMovieDetails = {
+  ...movieStub,
+  movieLength: 120,
+  rating: { kp: 8, imdb: 8.5 },
+  genres: [{ name: 'драма' }],
+  poster: { previewUrl: '', url: '' },
+};

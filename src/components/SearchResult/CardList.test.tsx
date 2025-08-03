@@ -1,8 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { moviesMock } from '../../__tests__/mocks';
 import CardList from './CardList';
-import { createRouteStub } from '../../__tests__/setupTests';
+import {
+  createRouteStub,
+  renderWithProviders,
+} from '../../__tests__/setupTests';
 
 describe('CardList', () => {
   it('renders correctly with data', () => {
@@ -10,7 +13,7 @@ describe('CardList', () => {
       '/search',
       <CardList items={moviesMock} />
     );
-    render(<RouteStub initialEntries={['/search']} />);
+    renderWithProviders(<RouteStub initialEntries={['/search']} />);
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
     const length = moviesMock.docs.length;
@@ -33,7 +36,7 @@ describe('CardList', () => {
       '/search',
       <CardList items={moviesMock} />
     );
-    render(<RouteStub initialEntries={['/search']} />);
+    renderWithProviders(<RouteStub initialEntries={['/search']} />);
     expect(screen.queryByText('Name')).not.toBeInTheDocument();
     expect(screen.queryByText('Description')).not.toBeInTheDocument();
     expect(screen.queryByTestId('card-name')).toBeNull();
