@@ -1,34 +1,35 @@
-import { Await, Outlet, useLoaderData, useSearchParams } from 'react-router';
+import { Outlet, useSearchParams } from 'react-router';
 import './index.css';
 import Loader from '../Loader';
-import React from 'react';
+
 import CardList from './CardList';
-import { useLocation } from 'react-router';
+
+import { useGetMoviesQuery } from '../../common/moviesApi';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 function SearchResult() {
-  const { promise } = useLoaderData();
-  const location = useLocation();
   const [params] = useSearchParams();
   const movieId = params.get('details');
-
-  const getSuspenseKey = (): string => {
-    const newQuery = new URLSearchParams(params);
-    newQuery.delete('details');
-    const searchURL = `${location.pathname}${newQuery.toString()}`;
-    return searchURL;
-  };
+  const page = params.get('page') ? Number(params.get('page')) : 1;
+  const term = params.get('query') ?? '';
+  const { data, error, isLoading } = useGetMoviesQuery({
+    searchTerm: term,
+    pageNumber: page,
+  });
 
   return (
     <>
       <div data-testid="search-result" className="card container min-vh70">
-        <React.Suspense
-          fallback={<Loader className="container center" />}
-          key={getSuspenseKey()}
-        >
-          <Await resolve={promise}>
-            {(promise) => <CardList items={promise} />}
-          </Await>
-        </React.Suspense>
+        {isLoading ? (
+          <Loader className="container center" />
+        ) : error ? (
+          <span>
+            {' '}
+            {`${(error as FetchBaseQueryError).status} ${JSON.stringify((error as FetchBaseQueryError).data)}`}{' '}
+          </span>
+        ) : data ? (
+          <CardList items={data} />
+        ) : null}
         {movieId && (
           <div className="card sidebar">
             <Outlet />

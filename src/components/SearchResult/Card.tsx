@@ -1,5 +1,5 @@
 import { NavLink, useSearchParams } from 'react-router';
-import { type Movie } from '../../App';
+import { type Movie } from '../../common/types';
 import { useAppDispatch, useTheme } from '../../common/hooks';
 import { selectMovie, unselectMovie } from './selectedSlice';
 import React from 'react';

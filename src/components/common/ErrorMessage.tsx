@@ -1,6 +1,6 @@
 import { useRouteError } from 'react-router';
 import { composeErrorMessage } from '../../common/utils';
-import type { ApiError } from '../../App';
+import type { ApiError } from '../../common/types';
 
 export function ErrorMessage(props: React.HTMLAttributes<HTMLDivElement>) {
   const error = useRouteError();

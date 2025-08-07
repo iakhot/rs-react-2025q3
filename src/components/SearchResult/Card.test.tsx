@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Card from './Card';
 import { movieStub } from '../../__tests__/mocks';
-import type { Movie } from '../../App';
+import type { Movie } from '../../common/types';
 import {
   createRouteStub,
   renderWithProviders,

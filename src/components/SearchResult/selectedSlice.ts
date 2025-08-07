@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../common/store';
-import type { Movie } from '../../App';
+import type { Movie } from '../../common/types';
 
 export interface SelectedState {
   selectedMovies: Array<Movie>;

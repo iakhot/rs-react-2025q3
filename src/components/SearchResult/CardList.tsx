@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { ApiResult, Movie } from '../../App';
+import type { ApiResult, Movie } from '../../common/types';
 import Card from './Card';
 import './index.css';
 import Pagination from './Pagination';

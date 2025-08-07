@@ -1,4 +1,4 @@
-import type { Movie } from '../../App';
+import type { Movie } from '../../common/types';
 import { useAppDispatch, useAppSelector, useTheme } from '../../common/hooks';
 import { formatCsv, saveFileDialog } from '../../common/utils';
 import { unselectAll, selectedMovies } from '../SearchResult/selectedSlice';

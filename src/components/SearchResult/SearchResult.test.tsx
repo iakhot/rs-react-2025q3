@@ -6,7 +6,7 @@ import { RouterProvider } from 'react-router';
 import { mockMemoryRouter, renderAsync } from '../../__tests__/setupTests';
 import { setupStore } from '../../common/store';
 import { Provider } from 'react-redux';
-import { ApiError } from '../../App';
+import { ApiError } from '../../common/types';
 
 const mockLoaderData = vi.fn();
 

@@ -7,7 +7,7 @@ import { afterEach } from 'vitest';
 import { createMemoryRouter, createRoutesStub } from 'react-router';
 import React, { type PropsWithChildren } from 'react';
 import { ErrorMessage } from '../components/common';
-import type { ApiResult, ApiMovieDetails } from '../App';
+import type { ApiResult, ApiMovieDetails } from '../common/types';
 
 import type { RenderOptions } from '@testing-library/react';
 import { Provider } from 'react-redux';

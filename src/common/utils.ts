@@ -1,5 +1,5 @@
-import type { ApiError, ApiMovie, Movie } from '../App';
-import { apiUrl } from './axiosService';
+import type { ApiError, ApiMovie, Movie } from '../common/types';
+import { apiUrl } from './moviesApi';
 
 export const composeErrorMessage = (error: ApiError): string => {
   if (error.status) {
@@ -26,7 +26,7 @@ export const convertData = (results: ApiMovie[]): Movie[] => {
 };
 
 const getDetailsUrl = (movieId: number) => {
-  return `${apiUrl}/movie/${movieId}`;
+  return `${apiUrl}/${movieId}`;
 };
 
 export const formatCsv = (movies: Movie[]) => {
