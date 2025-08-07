@@ -2,20 +2,32 @@ import { NavLink, useSearchParams } from 'react-router';
 import './index.css';
 import Loader from '../Loader';
 import { useGetMovieDetailsQuery } from '../../common/moviesApi';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
 function MovieDetails() {
   const [params] = useSearchParams();
   const movieId = params.get('details') ?? '';
-  const { data, isLoading } = useGetMovieDetailsQuery(movieId);
+  const { currentData, isFetching, error } = useGetMovieDetailsQuery(movieId);
 
   const newQuery = new URLSearchParams(params);
   newQuery.delete('details');
 
+  if (error) {
+    return (
+      <span>
+        {' '}
+        {`${(error as FetchBaseQueryError).status} ${JSON.stringify((error as FetchBaseQueryError).data)}`}{' '}
+      </span>
+    );
+  }
+
+  if (isFetching && !currentData) {
+    return <Loader className="container center" />;
+  }
+
   return (
     <>
-      {isLoading ? (
-        <Loader className="container center" />
-      ) : data ? (
+      {currentData ? (
         <>
           <NavLink to={{ search: newQuery.toString() }} className="sticky">
             &larr; Back
@@ -28,36 +40,44 @@ function MovieDetails() {
             <div className="details-column">
               <div className="flex-row">
                 <span className="movie-tilte" title="movie title">
-                  {data.name ? data.name : data.alternativeName}
+                  {currentData.name
+                    ? currentData.name
+                    : currentData.alternativeName}
                 </span>
                 <span
                   className="rating-border"
                   aria-label="rating"
                   title="rating"
                 >
-                  {data.rating.kp ? data.rating.kp : data.rating.imdb}
+                  {currentData.rating.kp
+                    ? currentData.rating.kp
+                    : currentData.rating.imdb}
                 </span>
               </div>
               <div className="card flex-child-container center">
                 <img
                   src={
-                    data.poster.previewUrl
-                      ? data.poster.previewUrl
-                      : data.poster.url
+                    currentData.poster.previewUrl
+                      ? currentData.poster.previewUrl
+                      : currentData.poster.url
                   }
                 />
                 <span>
-                  {data.genres.map((g: { name: string }) => g.name).join(', ')}
+                  {currentData.genres
+                    .map((g: { name: string }) => g.name)
+                    .join(', ')}
                 </span>
                 <div className="flex-child-container flex-row timings">
-                  <span title="release year">{data.year}</span>
-                  <span title="runtime">{data.movieLength} min</span>
+                  <span title="release year">{currentData.year}</span>
+                  <span title="runtime">{currentData.movieLength} min</span>
                 </div>
               </div>
 
               <span>
                 <p title="description">
-                  {data.description ? data.description : data.shortDescription}
+                  {currentData.description
+                    ? currentData.description
+                    : currentData.shortDescription}
                 </p>
               </span>
             </div>

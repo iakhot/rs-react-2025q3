@@ -12,24 +12,28 @@ function SearchResult() {
   const movieId = params.get('details');
   const page = params.get('page') ? Number(params.get('page')) : 1;
   const term = params.get('query') ?? '';
-  const { data, error, isLoading } = useGetMoviesQuery({
+  const { currentData, error, isFetching } = useGetMoviesQuery({
     searchTerm: term,
     pageNumber: page,
   });
 
+  if (error) {
+    return (
+      <span>
+        {' '}
+        {`${(error as FetchBaseQueryError).status} ${JSON.stringify((error as FetchBaseQueryError).data)}`}{' '}
+      </span>
+    );
+  }
+
+  if (isFetching && !currentData) {
+    return <Loader className="container center" />;
+  }
+
   return (
     <>
       <div data-testid="search-result" className="card container min-vh70">
-        {isLoading ? (
-          <Loader className="container center" />
-        ) : error ? (
-          <span>
-            {' '}
-            {`${(error as FetchBaseQueryError).status} ${JSON.stringify((error as FetchBaseQueryError).data)}`}{' '}
-          </span>
-        ) : data ? (
-          <CardList items={data} />
-        ) : null}
+        {currentData ? <CardList items={currentData} /> : null}
         {movieId && (
           <div className="card sidebar">
             <Outlet />
