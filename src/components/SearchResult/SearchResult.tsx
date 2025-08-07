@@ -5,7 +5,7 @@ import Loader from '../Loader';
 import CardList from './CardList';
 
 import { useGetMoviesQuery } from '../../common/moviesApi';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorMessage } from '../common';
 
 function SearchResult() {
   const [params] = useSearchParams();
@@ -18,12 +18,7 @@ function SearchResult() {
   });
 
   if (error) {
-    return (
-      <span>
-        {' '}
-        {`${(error as FetchBaseQueryError).status} ${JSON.stringify((error as FetchBaseQueryError).data)}`}{' '}
-      </span>
-    );
+    return <ErrorMessage error={error} className="card min-vh70" />;
   }
 
   if (isFetching && !currentData) {

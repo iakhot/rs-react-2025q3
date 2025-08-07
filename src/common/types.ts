@@ -31,7 +31,7 @@ export interface ApiMovieDetails extends Movie, ApiMovie {
   genres: { name: string }[];
   poster: { previewUrl: string; url: string };
 }
-
+/// TODO
 export class ApiError extends Error {
   constructor(props: ApiError) {
     super(props.message);

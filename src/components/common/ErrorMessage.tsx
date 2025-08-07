@@ -1,16 +1,21 @@
-import { useRouteError } from 'react-router';
 import { composeErrorMessage } from '../../common/utils';
-import type { ApiError } from '../../common/types';
+import type { SerializedError } from '@reduxjs/toolkit/react';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
-export function ErrorMessage(props: React.HTMLAttributes<HTMLDivElement>) {
-  const error = useRouteError();
+export function ErrorMessage({
+  error,
+  className = '',
+}: {
+  error: FetchBaseQueryError | SerializedError;
+  className?: string;
+}) {
   return (
     <div
       data-testid="api-error"
-      className={`warning text-center ${props.className}`}
+      className={`card warning text-center ${className}`}
     >
       <div>An error has occurred while loading the data:</div>
-      <div>{composeErrorMessage(error as ApiError)}</div>
+      <div>{composeErrorMessage(error)}</div>
     </div>
   );
 }

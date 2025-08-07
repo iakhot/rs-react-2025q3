@@ -1,16 +1,34 @@
-import type { ApiError, ApiMovie, Movie } from '../common/types';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import type { ApiMovie, Movie } from '../common/types';
 import { apiUrl } from './moviesApi';
+import type { SerializedError } from '@reduxjs/toolkit/react';
 
-export const composeErrorMessage = (error: ApiError): string => {
-  if (error.status) {
+const ErrorString = {
+  SERVER_ERROR: 'Server side error',
+  CLIENT_ERROR: 'Client side error',
+  UNEXPECTED_ERROR: 'Unexpected Error',
+};
+
+export const composeErrorMessage = (
+  error: FetchBaseQueryError | SerializedError
+): string | undefined => {
+  if ('status' in error) {
     const status = error.status;
-    const message = `${status} ${error.statusText}`;
-    return status >= 500
-      ? `Server side error: ${message}`
-      : status >= 400
-        ? `Client side error: ${message}`
-        : `${message}`;
-  } else return error.message;
+    switch (true) {
+      case +error.status >= 500:
+        console.error(ErrorString.SERVER_ERROR, JSON.stringify(error.data));
+        return `${ErrorString.SERVER_ERROR}: ${error.data?.message}`;
+      case +error.status >= 400:
+        console.error(ErrorString.CLIENT_ERROR, JSON.stringify(error.data));
+        return `Client side error: ${error.data?.message}`;
+      case typeof status === 'string':
+        console.error(error.status, JSON.stringify(error.data));
+        return `${error.status} ${error.error}`;
+    }
+  } else {
+    console.error(ErrorString.UNEXPECTED_ERROR, error.message);
+    return `${ErrorString.UNEXPECTED_ERROR}: ${error.message}`;
+  }
 };
 
 export const convertData = (results: ApiMovie[]): Movie[] => {
