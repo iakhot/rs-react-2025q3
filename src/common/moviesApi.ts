@@ -24,9 +24,11 @@ export const api = createApi({
     getMovies: build.query<ApiResult, SearchQueryArgs>({
       query: ({ searchTerm = '', pageNumber = 1, limit = 5 }) =>
         `/search?query=${searchTerm}&page=${pageNumber}&limit=${limit}`,
+      keepUnusedDataFor: 120,
     }),
     getMovieDetails: build.query<ApiMovieDetails, string>({
       query: (id) => `/${id}`,
+      keepUnusedDataFor: 30,
     }),
   }),
 });

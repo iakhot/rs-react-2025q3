@@ -6,7 +6,7 @@ import { RouterProvider } from 'react-router';
 import { mockMemoryRouter, renderAsync } from '../../__tests__/setupTests';
 import { setupStore } from '../../common/store';
 import { Provider } from 'react-redux';
-import { ApiError } from '../../common/types';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 const mockLoaderData = vi.fn();
 
@@ -73,14 +73,12 @@ describe('SearchResult', () => {
     );
   });
   it('displays warning on 500 error', async () => {
-    const error: ApiError = {
+    const error: FetchBaseQueryError = {
       status: 500,
-      statusText: 'Internal Server error',
-      name: '',
-      message: '',
+      data: { message: 'Internal Server error' },
     };
 
-    const promise = Promise.reject(new ApiError(error));
+    const promise = Promise.reject(error);
     await expect(promise).rejects.toThrow();
     mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = mockMemoryRouter(
@@ -95,18 +93,20 @@ describe('SearchResult', () => {
       'class',
       expect.stringContaining('warning')
     );
+    const message =
+      'message' in error.data
+        ? (error.data as { message: string }).message
+        : '';
     expect(errorMsg.textContent).toContain(
-      `An error has occurred while loading the data:Server side error: ${error.status} ${error.statusText}`
+      `An error has occurred while loading the data:Server side error: ${error.status} ${message}`
     );
   });
   it('displays warning on 400 error', async () => {
-    const error: ApiError = {
+    const error: FetchBaseQueryError = {
       status: 404,
-      statusText: 'Not found',
-      name: '',
-      message: '',
+      data: { message: 'Not found' },
     };
-    const promise = Promise.reject(new ApiError(error));
+    const promise = Promise.reject(error);
     await expect(promise).rejects.toThrow();
     mockLoaderData.mockReturnValueOnce({ promise });
     const RouterMock = mockMemoryRouter(
@@ -121,7 +121,7 @@ describe('SearchResult', () => {
       expect.stringContaining('warning')
     );
     expect(errorMsg.textContent).toContain(
-      `An error has occurred while loading the data:Client side error: ${error.status} ${error.statusText}`
+      `An error has occurred while loading the data:Client side error: ${error.status} ${'message' in error.data ? (error.data as { message: string }).message : ''}`
     );
   });
 });

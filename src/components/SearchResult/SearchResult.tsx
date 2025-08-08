@@ -12,17 +12,20 @@ function SearchResult() {
   const movieId = params.get('details');
   const page = params.get('page') ? Number(params.get('page')) : 1;
   const term = params.get('query') ?? '';
-  const { currentData, error, isFetching } = useGetMoviesQuery({
-    searchTerm: term,
-    pageNumber: page,
-  });
+  const { currentData, error, isFetching } = useGetMoviesQuery(
+    {
+      searchTerm: term,
+      pageNumber: page,
+    },
+    { refetchOnMountOrArgChange: 300 }
+  );
 
   if (error) {
     return <ErrorMessage error={error} className="card min-vh70" />;
   }
 
   if (isFetching && !currentData) {
-    return <Loader className="container center" />;
+    return <Loader className="container center min-vh70" />;
   }
 
   return (

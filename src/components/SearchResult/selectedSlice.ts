@@ -34,8 +34,6 @@ export const { selectMovie, unselectMovie, unselectAll } =
 
 export default selectedSlice.reducer;
 
-// selectors
-
 export const selectedMovies = (state: RootState) =>
   state.selectedMovies.selectedMovies;
 export const selectedMovieIds = createSelector(selectedMovies, (movies) => {

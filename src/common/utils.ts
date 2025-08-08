@@ -12,6 +12,7 @@ const ErrorString = {
 export const composeErrorMessage = (
   error: FetchBaseQueryError | SerializedError
 ): string | undefined => {
+  console.log(`============ TEST ===== ${error}`);
   if ('status' in error) {
     const status = error.status;
     switch (true) {

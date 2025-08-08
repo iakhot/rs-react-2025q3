@@ -31,15 +31,8 @@ export interface ApiMovieDetails extends Movie, ApiMovie {
   genres: { name: string }[];
   poster: { previewUrl: string; url: string };
 }
-/// TODO
-export class ApiError extends Error {
-  constructor(props: ApiError) {
-    super(props.message);
-    this.status = props.status;
-    this.statusText = props.statusText;
-    this.name = props.name;
-    this.stack = props.stack;
-  }
-  status?: number;
-  statusText?: string;
-}
+
+export const LS_KEYS = {
+  term: 'searchTerm',
+  theme: 'theme',
+};
