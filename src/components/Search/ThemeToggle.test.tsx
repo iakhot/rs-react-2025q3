@@ -29,8 +29,8 @@ describe('ThemeToggle', () => {
     const toggle = screen.getByRole('checkbox');
     expect(toggle).toBeChecked();
     await ui.click(toggle);
-    waitFor(() => {
-      expect(localStorage.getItem(themeKey)).toBe(/Dark/i);
+    await waitFor(() => {
+      expect(localStorage.getItem(themeKey)).toMatch(/Light/i);
     });
   });
   it('toggles theme in LS', async () => {
@@ -43,8 +43,8 @@ describe('ThemeToggle', () => {
     const toggle = screen.getByRole('checkbox');
     expect(toggle).not.toBeChecked();
     await ui.click(toggle);
-    waitFor(() => {
-      expect(localStorage.getItem(themeKey)).toEqual('dark');
+    await waitFor(() => {
+      expect(localStorage.getItem(themeKey)).toMatch(/Dark/i);
     });
   });
 });

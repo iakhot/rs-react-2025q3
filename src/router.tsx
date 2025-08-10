@@ -3,7 +3,6 @@ import App from './App';
 import SearchResult from './components/SearchResult';
 import { NotFound } from './components/common';
 import MovieDetails from './components/Details';
-import Search from './components/Search';
 
 export const router = createBrowserRouter([
   {
@@ -14,7 +13,6 @@ export const router = createBrowserRouter([
     path: '/movies',
     Component: App,
     children: [
-      { index: true, Component: Search },
       {
         path: 'search',
         Component: SearchResult,

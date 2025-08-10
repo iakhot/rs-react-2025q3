@@ -1,9 +1,7 @@
 import { Outlet, useSearchParams } from 'react-router';
 import './index.css';
 import Loader from '../Loader';
-
 import CardList from './CardList';
-
 import { useGetMoviesQuery } from '../../common/moviesApi';
 import { ErrorMessage } from '../common';
 
@@ -19,7 +17,6 @@ function SearchResult() {
     },
     { refetchOnMountOrArgChange: 300 }
   );
-
   if (error) {
     return <ErrorMessage error={error} className="card min-vh70" />;
   }

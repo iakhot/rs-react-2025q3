@@ -25,7 +25,7 @@ export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
   return (
     <details
       open
-      id="download-selected"
+      data-testid="download-selected"
       className="flyout float-left"
       style={{ visibility: hidden ? 'hidden' : 'visible' }}
     >

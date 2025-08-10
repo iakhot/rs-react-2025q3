@@ -16,6 +16,7 @@ import ThemeToggle from './ThemeToggle';
 import { ThemeContext } from '../../context/ThemeContext';
 import { unselectAll } from '../SearchResult/selectedSlice';
 import { selectSearchTerm, setSearchTerm } from './searchSlice';
+import { LS_KEYS } from '../../common/types';
 
 const getQueryString = (value: string): string => {
   return encodeURI(`search?query=${value}&page=1`);
@@ -23,7 +24,7 @@ const getQueryString = (value: string): string => {
 
 function Search() {
   const { currentTheme } = useContext(ThemeContext);
-  const [, saveTerm] = useLocalStorage('searchTerm');
+  const [, saveTerm] = useLocalStorage(LS_KEYS.term);
   const searchTerm = useAppSelector(selectSearchTerm);
   const [inputVal, setInputVal] = useState(searchTerm);
   const navigate = useNavigate();

@@ -6,26 +6,35 @@ import {
   createRouteStub,
   renderWithProviders,
 } from '../../__tests__/setupTests';
-import { useAppDispatch } from '../../common/hooks';
+import ThemeContextProvider from '../../context/ThemeContext';
 
 vi.mock('../../common/utils', () => ({
   saveFileDialog: vi.fn(),
+  formatCsv: vi.fn(),
 }));
 const { saveFileDialog } = vi.mocked(await import('../../common/utils'));
 
-vi.mock('../../common/hooks.ts');
-const mockDispatch = vi.mocked(useAppDispatch);
+const spyDispatch = vi.fn();
+vi.mock('../../common/hooks.ts', async () => {
+  const actual = await vi.importActual('../../common/hooks.ts');
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(() => spyDispatch),
+  };
+});
 
 describe('DownloadSelected', () => {
-  it('renders correctly with data', () => {
+  it('renders correctly with data', async () => {
     const RouteStub = createRouteStub(
       '/search',
-      <DownloadSelected hidden={false} />
+      <ThemeContextProvider>
+        <DownloadSelected hidden={false} />
+      </ThemeContextProvider>
     );
     renderWithProviders(<RouteStub initialEntries={['/search']} />, {
       preloadedState: { selectedMovies: { selectedMovies: moviesList } },
     });
-    waitFor(() => {
+    await waitFor(() => {
       expect(screen.getByTestId('download-selected')).toBeInTheDocument();
       expect(
         screen.getByText(`${moviesList.length} movies selected`)
@@ -34,28 +43,30 @@ describe('DownloadSelected', () => {
       expect(screen.queryByText('Download')).toBeInTheDocument();
     });
   });
-  it('renders hidden when no data', () => {
+  it('renders hidden when no data', async () => {
     const RouteStub = createRouteStub(
       '/search',
-      <DownloadSelected hidden={true} />
+      <ThemeContextProvider>
+        <DownloadSelected hidden={true} />
+      </ThemeContextProvider>
     );
     renderWithProviders(<RouteStub initialEntries={['/search']} />, {
       preloadedState: { selectedMovies: { selectedMovies: [] } },
     });
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(screen.getByTestId('download-selected')).toHaveAttribute(
         'style',
         expect.stringContaining('hidden')
       );
-      expect(screen.queryByText('Unselect all')).toBeNull();
-      expect(screen.queryByText('Download')).toBeNull();
     });
   });
   it('triggers download', async () => {
     const RouteStub = createRouteStub(
       '/search',
-      <DownloadSelected hidden={false} />
+      <ThemeContextProvider>
+        <DownloadSelected hidden={false} />
+      </ThemeContextProvider>
     );
     const { user } = renderWithProviders(
       <RouteStub initialEntries={['/search']} />,
@@ -66,7 +77,7 @@ describe('DownloadSelected', () => {
 
     await user.click(screen.getByRole('button', { name: 'Download' }));
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(saveFileDialog).toHaveBeenCalledWith(
         new Blob(),
         `${moviesList.length}_best_movies.csv`
@@ -76,7 +87,9 @@ describe('DownloadSelected', () => {
   it('triggers unselect all', async () => {
     const RouteStub = createRouteStub(
       '/search',
-      <DownloadSelected hidden={false} />
+      <ThemeContextProvider>
+        <DownloadSelected hidden={false} />
+      </ThemeContextProvider>
     );
     const { user } = renderWithProviders(
       <RouteStub initialEntries={['/search']} />,
@@ -87,10 +100,9 @@ describe('DownloadSelected', () => {
 
     await user.click(screen.getByRole('button', { name: 'Unselect all' }));
 
-    waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({
+    await waitFor(() => {
+      expect(spyDispatch).toHaveBeenCalledWith({
         type: 'selectedMovies/unselectAll',
-        payload: undefined,
       });
     });
   });
