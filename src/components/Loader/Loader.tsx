@@ -1,11 +1,11 @@
-import reactLogo from '../../assets/react.svg';
+import Image from 'next/image';
 import './index.css';
 
 function Loader(props: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div {...props}>
-      <img
-        src={reactLogo}
+      <Image
+        src="/react.svg"
         data-testid="loader"
         className="logo react"
         aria-label="Loading results"

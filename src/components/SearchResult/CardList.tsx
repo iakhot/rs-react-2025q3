@@ -8,6 +8,7 @@ import { selectedMovieIds } from './selectedSlice';
 import { DownloadSelected } from '../common';
 import { useGetMoviesQuery } from '../../common/moviesApi';
 import { selectSearchTerm } from '../Search/searchSlice';
+import Image from 'next/image';
 
 const CardList = memo(function CardList({ items }: { items: ApiResult }) {
   const { docs, pages, page } = items;
@@ -45,7 +46,7 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
               className={`reload ${currentTheme}`}
               onClick={refetch}
             >
-              <img src="/icons8-reload.png" />
+              <Image alt="Reload icon" src="/icons8-reload.png" />
               Reload
             </button>
           </div>

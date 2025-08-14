@@ -3,6 +3,7 @@ import './index.css';
 import Loader from '../Loader';
 import { useGetMovieDetailsQuery } from '../../common/moviesApi';
 import { ErrorMessage } from '../common';
+import Image from 'next/image';
 
 function MovieDetails() {
   const [params] = useSearchParams();
@@ -44,7 +45,8 @@ function MovieDetails() {
               </span>
             </div>
             <div className="card flex-child-container center">
-              <img
+              <Image
+                alt="Movie poster"
                 src={
                   currentData.poster.previewUrl
                     ? currentData.poster.previewUrl
