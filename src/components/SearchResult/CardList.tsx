@@ -4,7 +4,7 @@ import Card from './Card';
 import './index.css';
 import Pagination from './Pagination';
 import { useAppSelector, useTheme } from '../../common/hooks';
-import { selectedMovieIds } from './selectedSlice';
+import { selectedMovies } from './selectedSlice';
 import { DownloadSelected } from '../common';
 import { useGetMoviesQuery } from '../../common/moviesApi';
 import { selectSearchTerm } from '../Search/searchSlice';
@@ -14,7 +14,7 @@ import reloadIcon from '../../../public/icons8-reload.png';
 const CardList = memo(function CardList({ items }: { items: ApiResult }) {
   const { docs, pages, page } = items;
   const searchTerm = useAppSelector(selectSearchTerm);
-  const selectedIds = useAppSelector(selectedMovieIds);
+  const selectedIds = useAppSelector(selectedMovies);
   const { refetch } = useGetMoviesQuery({
     searchTerm: searchTerm,
     pageNumber: page,

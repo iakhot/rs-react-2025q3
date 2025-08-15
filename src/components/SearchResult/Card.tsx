@@ -19,7 +19,7 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
     const checked = event.target.checked;
     if (dispatch) {
       if (checked) {
-        dispatch(selectMovie(movie));
+        dispatch(selectMovie(movie.id));
       } else {
         dispatch(unselectMovie(movie.id));
       }
