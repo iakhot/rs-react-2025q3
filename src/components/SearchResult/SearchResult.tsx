@@ -1,4 +1,4 @@
-import { Outlet, useSearchParams } from 'react-router';
+import { useSearchParams } from 'next/navigation';
 import './index.css';
 import Loader from '../Loader';
 import CardList from './CardList';
@@ -6,8 +6,8 @@ import { useGetMoviesQuery } from '../../common/moviesApi';
 import { ErrorMessage } from '../common';
 
 function SearchResult() {
-  const [params] = useSearchParams();
-  const movieId = params.get('details');
+  const params = useSearchParams();
+  //const movieId = params.get('details');
   const page = params.get('page') ? Number(params.get('page')) : 1;
   const term = params.get('query') ?? '';
   const { currentData, error, isFetching } = useGetMoviesQuery(
@@ -29,11 +29,11 @@ function SearchResult() {
     <>
       <div data-testid="search-result" className="card container min-vh70">
         {currentData ? <CardList items={currentData} /> : null}
-        {movieId && (
+        {/* {movieId && (
           <div className="card sidebar">
             <Outlet />
           </div>
-        )}
+        )} */}
       </div>
     </>
   );

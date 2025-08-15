@@ -1,15 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../common/store';
-import { LS_KEYS } from '../../common/types';
 
 export interface SearchTerm {
   value: string;
 }
 
-const savedSearchTerm = localStorage.getItem(LS_KEYS.term) || '';
-
 const initialState: SearchTerm = {
-  value: savedSearchTerm,
+  value: '',
 };
 
 export const searchTermSlice = createSlice({

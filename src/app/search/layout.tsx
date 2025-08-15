@@ -1,21 +1,19 @@
-import ThemeToggle from 'components/Search/ThemeToggle';
-import Link from 'next/link';
 import type { ReactNode } from 'react';
 import 'App.css';
 import 'index.css';
+import { Header } from './Header';
 
 export default function SearchLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className="vw50">
-        <div className="float-left">
-          <Link href="/about">About</Link>
-        </div>
-        <div className="float-right">
-          <ThemeToggle />
-        </div>
-      </div>
+      <Header />
       {children}
+      <div style={{ margin: '0 auto', textAlign: 'center' }}>
+        Icons by{' '}
+        <a target="_blank" rel="noreferrer" href="https://icons8.com">
+          Icons8
+        </a>
+      </div>
     </>
   );
 }

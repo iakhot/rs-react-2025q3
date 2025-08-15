@@ -11,15 +11,18 @@ import {
   useAppSelector,
   useLocalStorage,
 } from '../../common/hooks';
-import { useNavigate } from 'react-router';
-import ThemeToggle from './ThemeToggle';
 import { ThemeContext } from '../../context/ThemeContext';
 import { unselectAll } from '../SearchResult/selectedSlice';
 import { selectSearchTerm, setSearchTerm } from './searchSlice';
 import { LS_KEYS } from '../../common/types';
 
-const getQueryString = (value: string): string => {
-  return encodeURI(`search?query=${value}&page=1`);
+import { useRouter } from 'next/navigation';
+
+const getQueryString = (value: string): URLSearchParams => {
+  const newQuery = new URLSearchParams();
+  newQuery.set('query', value);
+  newQuery.set('page', '1');
+  return newQuery;
 };
 
 function Search() {
@@ -27,11 +30,12 @@ function Search() {
   const [, saveTerm] = useLocalStorage(LS_KEYS.term);
   const searchTerm = useAppSelector(selectSearchTerm);
   const [inputVal, setInputVal] = useState(searchTerm);
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   useEffect(() => {
-    navigate(getQueryString(searchTerm));
+    const newQuery = getQueryString(searchTerm);
+    window.history.replaceState(null, '', `?${newQuery.toString()}`);
   }, []);
 
   const handleSearchClick = (value: string): void => {
@@ -40,7 +44,8 @@ function Search() {
       saveTerm(term);
       dispatch(setSearchTerm(term));
       dispatch(unselectAll());
-      navigate(getQueryString(term));
+      const newQuery = getQueryString(term);
+      router.push(`?${newQuery.toString()}`);
     }
   };
 
@@ -68,7 +73,6 @@ function Search() {
       >
         {'Search'}
       </button>
-      <ThemeToggle />
     </div>
   );
 }

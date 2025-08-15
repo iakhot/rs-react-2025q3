@@ -1,5 +1,6 @@
-import { useSearchParams } from 'react-router';
+import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../common/hooks';
+import { useRouter } from 'next/navigation';
 
 function Pagination({
   pages = 10,
@@ -9,7 +10,8 @@ function Pagination({
   current: number;
 }) {
   const { currentTheme } = useTheme();
-  const [, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const range = (start: number, stop: number, step: number): number[] =>
     Array.from(
       { length: Math.ceil((stop - start) / step) },
@@ -19,11 +21,10 @@ function Pagination({
   const arr = range(1, pages + 1, 1);
 
   const handleClick = (page: number) => {
-    setSearchParams((params) => {
-      params.set('page', String(page));
-      params.delete('details');
-      return params;
-    });
+    const newQuery = new URLSearchParams(searchParams);
+    newQuery.set('page', String(page));
+    newQuery.delete('details');
+    router.push(`?${newQuery.toString()}`);
   };
 
   return (

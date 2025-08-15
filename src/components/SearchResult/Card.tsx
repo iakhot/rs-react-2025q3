@@ -1,4 +1,5 @@
-import { NavLink, useSearchParams } from 'react-router';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { type Movie } from '../../common/types';
 import { useAppDispatch, useTheme } from '../../common/hooks';
 import { selectMovie, unselectMovie } from './selectedSlice';
@@ -7,14 +8,9 @@ import React from 'react';
 function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
   const { currentTheme } = useTheme();
   const dispatch = useAppDispatch();
-  const [query] = useSearchParams();
+  const query = useSearchParams();
   const newQuery = new URLSearchParams(query);
   newQuery.set('details', String(movie.id));
-
-  const isActive = () => {
-    const searchParams = new URLSearchParams(location.search);
-    return searchParams.get('details') === String(movie.id);
-  };
 
   const handleSelect = (
     movie: Movie,
@@ -42,17 +38,9 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
         />
       </div>
       <div data-testid="card-name" className="item descr text-center">
-        <NavLink
-          relative="path"
-          to={{ search: newQuery.toString() }}
-          className={({ isActive: defaultIsActive }) =>
-            defaultIsActive && isActive()
-              ? `movie-link active ${currentTheme}`
-              : `movie-link ${currentTheme}`
-          }
-        >
+        <Link href={{ search: newQuery.toString() }} className="movie-link">
           <span>{movie.name ? movie.name : '...'}</span>
-        </NavLink>
+        </Link>
       </div>
       <div data-testid="card-description" className="item descr">
         {movie.description ? movie.description : '...'}
