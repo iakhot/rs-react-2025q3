@@ -1,6 +1,6 @@
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useTheme } from '../../common/hooks';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function Pagination({
   pages = 10,
@@ -11,7 +11,7 @@ function Pagination({
 }) {
   const { currentTheme } = useTheme();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const pathname = usePathname();
   const range = (start: number, stop: number, step: number): number[] =>
     Array.from(
       { length: Math.ceil((stop - start) / step) },
@@ -20,11 +20,11 @@ function Pagination({
 
   const arr = range(1, pages + 1, 1);
 
-  const handleClick = (page: number) => {
+  const getPageURL = (page: number) => {
     const newQuery = new URLSearchParams(searchParams);
     newQuery.set('page', String(page));
     newQuery.delete('details');
-    router.push(`?${newQuery.toString()}`);
+    return `${pathname}?${newQuery.toString()}`;
   };
 
   return (
@@ -34,15 +34,12 @@ function Pagination({
           return (
             <li key={i} className="page">
               {i == current ? (
-                <button
-                  className="button selected"
-                  onClick={() => handleClick(i)}
-                >
-                  {i}
+                <button className="button selected">
+                  <Link href={getPageURL(i)}>{i}</Link>
                 </button>
               ) : (
-                <button className={currentTheme} onClick={() => handleClick(i)}>
-                  {i}
+                <button className={currentTheme}>
+                  <Link href={getPageURL(i)}>{i}</Link>
                 </button>
               )}
             </li>

@@ -87,6 +87,16 @@ nav {
   .page {
     float: left;
   }
+
+  a,
+  a:hover,
+  a:visited {
+    color: var(--text-color);
+  }
+
+  a:active {
+    color: #ffffff;
+  }
 }
 
 .sidebar {
