@@ -1,0 +1,49 @@
+{
+  "About": {
+    "welcome": "Bienvenido a la aplicación de búsqueda de películas: un proyecto de capacitación para",
+    "RSSLink": "RS School React curso",
+    "by": "Hecho con amor por"
+  },
+  "CardList": {
+    "name": "Nombre",
+    "description": "Descripción",
+    "reload": "Recargar",
+    "reloadIconAlt": "Recarga icono",
+    "emptyList": "No se encontró nada, prueba con otro término de búsqueda..."
+  },
+  "DownloadSelected": {
+    "itemsSelected": "películas seleccionadas",
+    "unselect": "Deseleccionar Todo",
+    "download": "Descargar"
+  },
+  "LocaleToggle": {
+    "changeLang": "Cambiar lenguaje",
+    "esImgAlt": "ES sitio",
+    "enImgAlt": "EN sitio"
+  },
+  "MovieDetails": {
+    "back": "Atrás",
+    "posterImgAlt": "Afiche",
+    "description": "Descripción",
+    "rating": "Valuación",
+    "title": "Título",
+    "runtime": "Duración",
+    "releaseYear": "Año de estreno"
+  },
+  "RootLayout": {
+    "iconsby": "Iconos de",
+    "homeLink": "Página de inicio",
+    "aboutLink": "Acerca de"
+  },
+  "Search": {
+    "button": "Buscar"
+  },
+  "ThemeToggle": {
+    "dark": "Oscuro",
+    "light": "Claro"
+  },
+  "Welcome": {
+    "welcomeText": "Bienvenido a la aplicación de búsqueda de películas",
+    "searchButton": "Iniciar Búsqueda"
+  }
+}

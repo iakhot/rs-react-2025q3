@@ -6,7 +6,7 @@ import {
 } from './types';
 
 export const apiUrl = 'https://api.kinopoisk.dev/v1.4/movie';
-const token = 'CZA38XR-FRA4EH3-KAPJRZ8-C3S9DZ8';
+export const token = 'CZA38XR-FRA4EH3-KAPJRZ8-C3S9DZ8';
 
 export const api = createApi({
   reducerPath: 'moviesApi',

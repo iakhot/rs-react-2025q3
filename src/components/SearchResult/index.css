@@ -33,7 +33,7 @@
 
   input[type='checkbox']:checked {
     background-color: #747bff;
-    background-image: url('/public/icons8-checkmark.svg');
+    background-image: url('/icons8-checkmark.svg');
     background-size: cover;
   }
 }
@@ -86,6 +86,16 @@ nav {
 
   .page {
     float: left;
+  }
+
+  a,
+  a:hover,
+  a:visited {
+    color: var(--text-color);
+  }
+
+  a:active {
+    color: #ffffff;
   }
 }
 

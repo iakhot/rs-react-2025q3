@@ -1,0 +1,49 @@
+{
+  "About": {
+    "welcome": "Welcome to Movies search app - a training project for",
+    "RSSLink": "RS School React course",
+    "by": "Made with love by"
+  },
+  "CardList": {
+    "name": "Name",
+    "description": "Description",
+    "reload": "Reload",
+    "reloadIconAlt": "Reload icon",
+    "emptyList": "Nothing found, try another search term..."
+  },
+  "DownloadSelected": {
+    "itemsSelected": "movies selected",
+    "unselect": "Unselect All",
+    "download": "Download"
+  },
+  "LocaleToggle": {
+    "changeLang": "Change language",
+    "esImgAlt": "ES Locale",
+    "enImgAlt": "EN Locale"
+  },
+  "MovieDetails": {
+    "back": "Back",
+    "posterImgAlt": "Movie poster",
+    "description": "Description",
+    "rating": "Rating",
+    "title": "Movie title",
+    "runtime": "Runtime",
+    "releaseYear": "Release year"
+  },
+  "RootLayout": {
+    "iconsby": "Icons by",
+    "homeLink": "Home",
+    "aboutLink": "About"
+  },
+  "Search": {
+    "button": "Search"
+  },
+  "ThemeToggle": {
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "Welcome": {
+    "welcomeText": "Welcome to Movies search app",
+    "searchButton": "Start Search"
+  }
+}

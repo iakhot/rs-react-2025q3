@@ -1,25 +1,27 @@
-import type { Movie } from '../../common/types';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector, useTheme } from '../../common/hooks';
-import { formatCsv, saveFileDialog } from '../../common/utils';
+import { saveFileDialog } from '../../common/utils';
 import { unselectAll, selectedMovies } from '../SearchResult/selectedSlice';
 import './index.css';
+import { createCSVBlob } from '@/app/[locale]/search/action';
 
 export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
   const { currentTheme } = useTheme();
   const dispatch = useAppDispatch();
   const selectedObj = useAppSelector(selectedMovies);
+  const t = useTranslations('DownloadSelected');
 
   const handleUnselect = () => {
     dispatch(unselectAll());
   };
 
-  const handleDownload = async (movies: Movie[]) => {
-    const content = formatCsv(movies);
-    const blob = new Blob([content], {
-      type: 'text/plain;charset=utf-8',
-    });
-    const filename = `${movies.length}_best_movies.csv`;
-    await saveFileDialog(blob, filename);
+  const handleDownload = async (ids: number[]) => {
+    const getContent = createCSVBlob.bind(null, ids);
+    const blob = await getContent();
+    const filename = `${ids.length}_best_movies.csv`;
+    if (blob) {
+      await saveFileDialog(blob, filename);
+    }
   };
 
   return (
@@ -29,23 +31,25 @@ export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
       className="flyout float-left"
       style={{ visibility: hidden ? 'hidden' : 'visible' }}
     >
-      <summary>{selectedObj.length} movies selected</summary>
+      <summary>
+        {selectedObj.length} {t('itemsSelected')}
+      </summary>
       <p>
         <button
-          title="Unselect all"
+          title={t('unselect')}
           onClick={handleUnselect}
           className={currentTheme}
         >
-          Unselect all
+          {t('unselect')}
         </button>
       </p>
       <p>
         <button
-          title="Download"
+          title={t('download')}
           onClick={() => handleDownload(selectedObj)}
           className={currentTheme}
         >
-          Download
+          {t('download')}
         </button>
       </p>
     </details>

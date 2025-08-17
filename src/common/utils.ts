@@ -1,6 +1,5 @@
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import type { ApiMovie, Movie } from '../common/types';
-import { apiUrl } from './moviesApi';
+import type { ApiMovie, ApiMovieDetails, Movie } from '../common/types';
 import type { SerializedError } from '@reduxjs/toolkit/react';
 
 export const ErrorString = {
@@ -45,16 +44,18 @@ export const convertData = (results: ApiMovie[]): Movie[] => {
   });
 };
 
-const getDetailsUrl = (movieId: number) => {
-  return `${apiUrl}/${movieId}`;
-};
-
-export const formatCsv = (movies: Movie[]) => {
-  const headers = [...Object.keys(movies[0]), 'detailsURL'].join(',');
-  const rows = movies.map((movie) =>
-    [...Object.values(movie), getDetailsUrl(movie.id)].join(',')
-  );
-  return [headers, ...rows].join('\n');
+export const convertMovieDetails = (
+  movie: ApiMovieDetails
+): ApiMovieDetails => {
+  return {
+    id: movie.id,
+    name: movie.name ? movie.name : movie.alternativeName,
+    description: movie.description ? movie.description : movie.shortDescription,
+    rating: movie.rating,
+    genres: movie.genres,
+    year: movie.year,
+    movieLength: movie.movieLength,
+  } as ApiMovieDetails;
 };
 
 export const saveFileDialog = async (content: Blob, filename: string) => {

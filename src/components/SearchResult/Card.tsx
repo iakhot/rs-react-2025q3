@@ -1,4 +1,5 @@
-import { NavLink, useSearchParams } from 'react-router';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { type Movie } from '../../common/types';
 import { useAppDispatch, useTheme } from '../../common/hooks';
 import { selectMovie, unselectMovie } from './selectedSlice';
@@ -7,13 +8,12 @@ import React from 'react';
 function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
   const { currentTheme } = useTheme();
   const dispatch = useAppDispatch();
-  const [query] = useSearchParams();
-  const newQuery = new URLSearchParams(query);
-  newQuery.set('details', String(movie.id));
+  const query = useSearchParams();
 
-  const isActive = () => {
-    const searchParams = new URLSearchParams(location.search);
-    return searchParams.get('details') === String(movie.id);
+  const getDetailsURL = () => {
+    const newQuery = new URLSearchParams(query);
+    newQuery.set('details', String(movie.id));
+    return newQuery.toString();
   };
 
   const handleSelect = (
@@ -23,7 +23,7 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
     const checked = event.target.checked;
     if (dispatch) {
       if (checked) {
-        dispatch(selectMovie(movie));
+        dispatch(selectMovie(movie.id));
       } else {
         dispatch(unselectMovie(movie.id));
       }
@@ -42,17 +42,9 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
         />
       </div>
       <div data-testid="card-name" className="item descr text-center">
-        <NavLink
-          relative="path"
-          to={{ search: newQuery.toString() }}
-          className={({ isActive: defaultIsActive }) =>
-            defaultIsActive && isActive()
-              ? `movie-link active ${currentTheme}`
-              : `movie-link ${currentTheme}`
-          }
-        >
+        <Link href={{ search: getDetailsURL() }} className="movie-link">
           <span>{movie.name ? movie.name : '...'}</span>
-        </NavLink>
+        </Link>
       </div>
       <div data-testid="card-description" className="item descr">
         {movie.description ? movie.description : '...'}
