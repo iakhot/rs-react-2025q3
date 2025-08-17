@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import createNextIntlPlugin from 'next-intl/plugin';
+
 const nextConfig = {
   //   output: 'export',
   distDir: './dist',
@@ -11,6 +13,8 @@ const nextConfig = {
   experimental: {
     cacheComponents: true,
   },
+  trailingSlash: true,
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+export default withNextIntl(nextConfig);

@@ -68,3 +68,16 @@
   display: flex;
   justify-content: center;
 }
+
+.absolute {
+  position: absolute;
+}
+
+.right {
+  right: 0;
+}
+
+.dropdown {
+  img {
+  }
+}

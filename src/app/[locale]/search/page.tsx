@@ -1,7 +1,7 @@
 import { fetchDetails } from './action';
-import MovieDetails from 'components/Details';
-import type { ApiMovieDetails } from 'common/types';
-import SearchResult from 'components/SearchResult';
+import MovieDetails from '@/components/Details';
+import type { ApiMovieDetails } from '@/common/types';
+import SearchResult from '@/components/SearchResult';
 
 export interface SearchParamsType {
   details?: number;

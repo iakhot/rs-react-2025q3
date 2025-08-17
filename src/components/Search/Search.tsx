@@ -16,8 +16,8 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { unselectAll } from '../SearchResult/selectedSlice';
 import { selectSearchTerm, setSearchTerm } from './searchSlice';
 import { LS_KEYS } from '../../common/types';
-
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const getQueryString = (value: string, page: string): URLSearchParams => {
   const newQuery = new URLSearchParams();
@@ -36,6 +36,7 @@ function Search() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
+  const t = useTranslations('Search');
 
   useEffect(() => {
     const page = params.get('page') || '1';
@@ -72,11 +73,11 @@ function Search() {
         id="searchButton"
         data-testid="search-button"
         onClick={() => handleSearchClick(inputVal)}
-        aria-label="Search button"
-        title="Search"
+        aria-label={t('button')}
+        title={t('button')}
         className={`search-button ${currentTheme}`}
       >
-        {'Search'}
+        {t('button')}
       </button>
     </div>
   );

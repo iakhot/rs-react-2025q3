@@ -1,20 +1,22 @@
-import Link from 'next/link';
-import './index.css';
+import { Link } from '@/i18n/navigation';
+import '@/index.css';
+import { useTranslations } from 'next-intl';
 
 export function About() {
+  const t = useTranslations('About');
   return (
     <div className="card center vw50 flex-column">
       <h2>
-        Welcome to Movies search app - a training project for {''}
+        {t('welcome')} {''}
         <Link
           href="https://rs.school/courses/reactjs"
           rel="noopener noreferrer"
         >
-          RS School React course.
+          {t('RSSLink')}.
         </Link>
       </h2>
       <p>
-        Made with love by{' '}
+        {t('by')}{' '}
         <Link href="https://github.com/iakhot" rel="noopener noreferrer">
           iakhot
         </Link>

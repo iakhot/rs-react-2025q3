@@ -1,13 +1,15 @@
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector, useTheme } from '../../common/hooks';
 import { saveFileDialog } from '../../common/utils';
 import { unselectAll, selectedMovies } from '../SearchResult/selectedSlice';
 import './index.css';
-import { createCSVBlob } from 'app/search/action';
+import { createCSVBlob } from '@/app/[locale]/search/action';
 
 export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
   const { currentTheme } = useTheme();
   const dispatch = useAppDispatch();
   const selectedObj = useAppSelector(selectedMovies);
+  const t = useTranslations('DownloadSelected');
 
   const handleUnselect = () => {
     dispatch(unselectAll());
@@ -29,23 +31,25 @@ export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
       className="flyout float-left"
       style={{ visibility: hidden ? 'hidden' : 'visible' }}
     >
-      <summary>{selectedObj.length} movies selected</summary>
+      <summary>
+        {selectedObj.length} {t('itemsSelected')}
+      </summary>
       <p>
         <button
-          title="Unselect all"
+          title={t('unselect')}
           onClick={handleUnselect}
           className={currentTheme}
         >
-          Unselect all
+          {t('unselect')}
         </button>
       </p>
       <p>
         <button
-          title="Download"
+          title={t('download')}
           onClick={() => handleDownload(selectedObj)}
           className={currentTheme}
         >
-          Download
+          {t('download')}
         </button>
       </p>
     </details>

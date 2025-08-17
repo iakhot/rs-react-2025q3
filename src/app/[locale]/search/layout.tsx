@@ -1,9 +1,9 @@
 import { Suspense, type ReactNode } from 'react';
-import 'App.css';
-import 'index.css';
-import ReduxProvider from 'components/common/ReduxProvider';
-import Search from 'components/Search';
-import Loader from 'components/Loader';
+import '@/App.css';
+import '@/index.css';
+import ReduxProvider from '@/components/common/ReduxProvider';
+import Search from '@/components/Search';
+import Loader from '@/components/Loader';
 
 export default function SearchLayout({ children }: { children: ReactNode }) {
   return (

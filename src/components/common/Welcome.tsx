@@ -1,12 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export function Welcome() {
+  const t = useTranslations('Welcome');
   return (
     <div className="card center vw50 flex-column">
-      <h1>Welcome to Movies search app</h1>
+      <h1>{t('welcomeText')}</h1>
       <button>
-        <Link href="/search"> Start Search</Link>
+        <Link href="/search">{t('searchButton')}</Link>
       </button>
     </div>
   );

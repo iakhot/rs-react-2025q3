@@ -1,16 +1,17 @@
 'use client';
 import { memo } from 'react';
-import type { ApiResult, Movie } from '../../common/types';
+import type { ApiResult, Movie } from '@/common/types';
 import Card from './Card';
 import './index.css';
 import Pagination from './Pagination';
-import { useAppSelector } from 'common/hooks';
+import { useAppSelector } from '@/common/hooks';
 import { selectedMovies } from './selectedSlice';
-import { DownloadSelected } from '../common';
-import { useGetMoviesQuery } from 'common/moviesApi';
-import { selectSearchTerm } from '../Search/searchSlice';
+import { DownloadSelected } from '@/components/common';
+import { useGetMoviesQuery } from '@/common/moviesApi';
+import { selectSearchTerm } from '@/components/Search/searchSlice';
 import Image from 'next/image';
 import reloadIcon from '../../../public/icons8-reload.png';
+import { useTranslations } from 'next-intl';
 
 const CardList = memo(function CardList({ items }: { items: ApiResult }) {
   const { docs, pages, page } = items;
@@ -20,6 +21,7 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
     searchTerm: searchTerm,
     pageNumber: page,
   });
+  const t = useTranslations('CardList');
 
   return (
     <>
@@ -27,8 +29,8 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
         <div className="flex-child-container min-vw50">
           <div className="card grid">
             <div className="item fw600 text-center"> {''} </div>
-            <div className="item fw600 text-center"> Name </div>
-            <div className="item fw600 text-center"> Description </div>
+            <div className="item fw600 text-center"> {t('name')} </div>
+            <div className="item fw600 text-center"> {t('description')} </div>
             {docs.map((movie: Movie) => {
               return (
                 <Card
@@ -42,14 +44,14 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
           <div className="card flex-child-container flex-row">
             <DownloadSelected hidden={selectedIds.length == 0} />
             {pages > 1 ? <Pagination pages={10} current={page} /> : null}
-            <button title="Reload" className={`reload`} onClick={refetch}>
-              <Image alt="Reload icon" src={reloadIcon} />
-              Reload
+            <button title={t('reload')} className={`reload`} onClick={refetch}>
+              <Image alt={t('reloadIconAlt')} src={reloadIcon} />
+              {t('reload')}
             </button>
           </div>
         </div>
       ) : (
-        <p className="text-center">Nothing found, try another search term...</p>
+        <p className="text-center">{t('emptyList')}</p>
       )}
     </>
   );

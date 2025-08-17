@@ -1,12 +1,12 @@
 'use client';
-import './index.css';
+import '@/index.css';
 import { type ReactNode } from 'react';
 
 import { useSearchParams } from 'next/navigation';
-import { useGetMoviesQuery } from 'common/moviesApi';
+import { useGetMoviesQuery } from '@/common/moviesApi';
 import CardList from './CardList';
-import { ErrorMessage } from 'components/common';
-import Loader from 'components/Loader';
+import { ErrorMessage } from '@/components/common';
+import Loader from '@/components/Loader';
 
 function SearchResult({ children }: { children: ReactNode }) {
   const params = useSearchParams();

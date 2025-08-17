@@ -1,7 +1,7 @@
 'use server';
-import { apiUrl, token } from 'common/moviesApi';
-import type { ApiMovieDetails } from 'common/types';
-import { convertMovieDetails } from 'common/utils';
+import { apiUrl, token } from '@/common/moviesApi';
+import type { ApiMovieDetails } from '@/common/types';
+import { convertMovieDetails } from '@/common/utils';
 
 const getDetailsUrl = (movieId: number) => {
   return `${apiUrl}/${movieId}`;
