@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import 'App.css';
+import 'index.css';
 import { Header } from './Header';
 import Link from 'next/link';
 
@@ -18,7 +19,14 @@ export default function RootLayout({
       <body>
         <div id="root">
           <Header>
-            <Link href="/about">About</Link>
+            <ul>
+              <li key={'home'}>
+                <Link href="/">Home</Link>
+              </li>
+              <li key={'about'}>
+                <Link href="/about">About</Link>
+              </li>
+            </ul>
           </Header>
           <div className="min-vh70">{children}</div>
           <div style={{ margin: '0 auto', textAlign: 'center' }}>

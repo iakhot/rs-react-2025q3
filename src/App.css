@@ -4,6 +4,21 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  li {
+    float: left;
+    padding-right: 10px;
+  }
+  li a:active {
+    color: var(--text-color);
+  }
 }
 
 .card {
