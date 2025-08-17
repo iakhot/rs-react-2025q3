@@ -1,4 +1,4 @@
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../common/hooks';
 import Link from 'next/link';
 
@@ -11,7 +11,6 @@ function Pagination({
 }) {
   const { currentTheme } = useTheme();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const range = (start: number, stop: number, step: number): number[] =>
     Array.from(
       { length: Math.ceil((stop - start) / step) },
@@ -24,7 +23,7 @@ function Pagination({
     const newQuery = new URLSearchParams(searchParams);
     newQuery.set('page', String(page));
     newQuery.delete('details');
-    return `${pathname}?${newQuery.toString()}`;
+    return newQuery.toString();
   };
 
   return (
@@ -35,11 +34,11 @@ function Pagination({
             <li key={i} className="page">
               {i == current ? (
                 <button className="button selected">
-                  <Link href={getPageURL(i)}>{i}</Link>
+                  <Link href={{ search: getPageURL(i) }}>{i}</Link>
                 </button>
               ) : (
                 <button className={currentTheme}>
-                  <Link href={getPageURL(i)}>{i}</Link>
+                  <Link href={{ search: getPageURL(i) }}>{i}</Link>
                 </button>
               )}
             </li>

@@ -13,7 +13,6 @@ const nextConfig = {
   experimental: {
     cacheComponents: true,
   },
-  trailingSlash: true,
 };
 
 const withNextIntl = createNextIntlPlugin();

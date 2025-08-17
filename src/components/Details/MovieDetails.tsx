@@ -1,6 +1,6 @@
 import './index.css';
 import Image from 'next/image';
-import type { ApiMovieDetails } from 'common/types';
+import type { ApiMovieDetails } from '@/common/types';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 

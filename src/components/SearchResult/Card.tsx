@@ -9,8 +9,12 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
   const { currentTheme } = useTheme();
   const dispatch = useAppDispatch();
   const query = useSearchParams();
-  const newQuery = new URLSearchParams(query);
-  newQuery.set('details', String(movie.id));
+
+  const getDetailsURL = () => {
+    const newQuery = new URLSearchParams(query);
+    newQuery.set('details', String(movie.id));
+    return newQuery.toString();
+  };
 
   const handleSelect = (
     movie: Movie,
@@ -38,7 +42,7 @@ function Card({ movie, selected }: { movie: Movie; selected: boolean }) {
         />
       </div>
       <div data-testid="card-name" className="item descr text-center">
-        <Link href={{ search: newQuery.toString() }} className="movie-link">
+        <Link href={{ search: getDetailsURL() }} className="movie-link">
           <span>{movie.name ? movie.name : '...'}</span>
         </Link>
       </div>
