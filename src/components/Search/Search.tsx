@@ -1,3 +1,4 @@
+'use client';
 import {
   useContext,
   useEffect,
@@ -16,12 +17,12 @@ import { unselectAll } from '../SearchResult/selectedSlice';
 import { selectSearchTerm, setSearchTerm } from './searchSlice';
 import { LS_KEYS } from '../../common/types';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const getQueryString = (value: string): URLSearchParams => {
+const getQueryString = (value: string, page: string): URLSearchParams => {
   const newQuery = new URLSearchParams();
   newQuery.set('query', value);
-  newQuery.set('page', '1');
+  newQuery.set('page', page);
   return newQuery;
 };
 
@@ -29,13 +30,17 @@ function Search() {
   const { currentTheme } = useContext(ThemeContext);
   const [, saveTerm] = useLocalStorage(LS_KEYS.term);
   const searchTerm = useAppSelector(selectSearchTerm);
+
   const [inputVal, setInputVal] = useState(searchTerm);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
 
   useEffect(() => {
-    const newQuery = getQueryString(searchTerm);
-    window.history.replaceState(null, '', `?${newQuery.toString()}`);
+    const page = params.get('page') || '1';
+    const newQuery = getQueryString(searchTerm, page);
+    router.push(`${pathname}?${newQuery.toString()}`);
   }, []);
 
   const handleSearchClick = (value: string): void => {
@@ -44,7 +49,7 @@ function Search() {
       saveTerm(term);
       dispatch(setSearchTerm(term));
       dispatch(unselectAll());
-      const newQuery = getQueryString(term);
+      const newQuery = getQueryString(term, '1');
       router.push(`?${newQuery.toString()}`);
     }
   };

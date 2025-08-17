@@ -1,12 +1,13 @@
+'use client';
 import { memo } from 'react';
 import type { ApiResult, Movie } from '../../common/types';
 import Card from './Card';
 import './index.css';
 import Pagination from './Pagination';
-import { useAppSelector, useTheme } from '../../common/hooks';
+import { useAppSelector } from 'common/hooks';
 import { selectedMovies } from './selectedSlice';
 import { DownloadSelected } from '../common';
-import { useGetMoviesQuery } from '../../common/moviesApi';
+import { useGetMoviesQuery } from 'common/moviesApi';
 import { selectSearchTerm } from '../Search/searchSlice';
 import Image from 'next/image';
 import reloadIcon from '../../../public/icons8-reload.png';
@@ -19,7 +20,6 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
     searchTerm: searchTerm,
     pageNumber: page,
   });
-  const { currentTheme } = useTheme();
 
   return (
     <>
@@ -42,11 +42,7 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
           <div className="card flex-child-container flex-row">
             <DownloadSelected hidden={selectedIds.length == 0} />
             {pages > 1 ? <Pagination pages={10} current={page} /> : null}
-            <button
-              title="Reload"
-              className={`reload ${currentTheme}`}
-              onClick={refetch}
-            >
+            <button title="Reload" className={`reload`} onClick={refetch}>
               <Image alt="Reload icon" src={reloadIcon} />
               Reload
             </button>

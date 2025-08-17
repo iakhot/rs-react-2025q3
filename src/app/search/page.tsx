@@ -1,18 +1,33 @@
-'use client';
-
-import Search from 'components/Search';
+import { fetchDetails } from './action';
+import MovieDetails from 'components/Details';
+import type { ApiMovieDetails } from 'common/types';
 import SearchResult from 'components/SearchResult';
-import dynamic from 'next/dynamic';
 
-const ReduxProvider = dynamic(() => import('components/common/ReduxProvider'), {
-  ssr: false,
-});
+export interface SearchParamsType {
+  details?: number;
+  page?: number;
+  query?: string;
+}
 
-export default function SearchPage() {
+export default async function SearchPage({
+  searchParams,
+}: {
+  searchParams: URLSearchParams;
+}) {
+  const params = await searchParams;
+  const movieId = (params as SearchParamsType).details;
+  let movie = {};
+  if (movieId) {
+    movie = await fetchDetails(+movieId);
+  }
+
   return (
-    <ReduxProvider>
-      <Search />
-      <SearchResult />
-    </ReduxProvider>
+    <>
+      <SearchResult>
+        {movie ? (
+          <MovieDetails details={movie as ApiMovieDetails} params={params} />
+        ) : null}
+      </SearchResult>
+    </>
   );
 }

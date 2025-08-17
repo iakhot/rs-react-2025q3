@@ -13,13 +13,12 @@ const formatCsv = (movies: ApiMovieDetails[]) => {
     const values = Object.values(movie).map((v) => {
       return v instanceof Object ? JSON.stringify(v) : v;
     });
-    console.log(`===== arr ${values.length}, ${values.join(',')}`);
     return [...values, getDetailsUrl(movie.id)].join(',');
   });
   return [headers, ...rows].join('\n');
 };
 
-const fetchDetails = async (id: number): Promise<Response> => {
+export const fetchDetails = async (id: number): Promise<Response> => {
   return fetch(getDetailsUrl(id), {
     headers: {
       'X-API-KEY': token,

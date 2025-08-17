@@ -19,6 +19,10 @@
   min-height: 70vh;
 }
 
+.min-vh50 {
+  min-height: 50vh;
+}
+
 .min-vw50 {
   min-width: 50vw;
 }

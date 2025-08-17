@@ -1,13 +1,18 @@
 .details {
   flex: 0 1 auto;
   margin: 0 20px;
+  img {
+    position: relative;
+    object-fit: contain;
+  }
 }
 
-.details > img {
-  width: 200px;
+.poster-container {
+  position: relative;
+  width: 300px;
   height: auto;
-  max-width: 200px;
-  max-height: 300px;
+  max-width: 400px;
+  max-height: 500px;
 }
 
 .details-column {
@@ -15,7 +20,7 @@
   flex-flow: column nowrap;
 }
 
-.movie-tilte {
+.movie-title {
   color: #747bff;
   text-transform: capitalize;
   font-weight: bold;
