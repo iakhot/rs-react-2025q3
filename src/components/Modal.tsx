@@ -1,0 +1,78 @@
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
+import { createPortal } from 'react-dom';
+import ModalWrapper from './ModalWrapper';
+
+function Modal({
+  children,
+  container,
+  title,
+}: {
+  children: ReactNode;
+  container: HTMLElement;
+  title: string;
+}) {
+  const [showModal, setShowModal] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleClose = useCallback(() => {
+    setShowModal(false);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleClose();
+      }
+    };
+
+    if (showModal) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showModal, handleClose]);
+
+  useEffect(() => {
+    const handleBlur = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as HTMLElement)
+      ) {
+        handleClose();
+      }
+    };
+    if (showModal) {
+      document.addEventListener('mousedown', handleBlur);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleBlur);
+    };
+  }, [showModal, handleClose]);
+
+  if (!container) {
+    console.error('Target container is not found in DOM.');
+    return null;
+  }
+
+  return (
+    <div ref={modalRef}>
+      <button onClick={() => setShowModal(true)}>{title}</button>
+      {showModal &&
+        createPortal(
+          <ModalWrapper onClose={handleClose}>{children}</ModalWrapper>,
+          container
+        )}
+    </div>
+  );
+}
+
+export default Modal;
