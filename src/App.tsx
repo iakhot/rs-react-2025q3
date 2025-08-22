@@ -8,14 +8,14 @@ function App() {
   const m1 = useRef<HTMLElement>(null);
   const m2 = useRef<HTMLElement>(null);
   return (
-    <main className="flex">
-      <section id="uncontrolled" className="flex-1" ref={m1}>
-        <Modal container={m1.current} title="Open Uncontrolled Form">
+    <main className=" min-w-[80vw]">
+      <section id="uncontrolled" className="min-w-48" ref={m1}>
+        <Modal container={m1} title="Open Uncontrolled Form">
           <UncontrolledForm />
         </Modal>
       </section>
-      <section id="controlled" className="flex-1" ref={m2}>
-        <Modal container={m2.current} title="Open Controlled Form">
+      <section id="controlled" className="min-w-48" ref={m2}>
+        <Modal container={m2} title="Open Controlled Form">
           <ControlledForm />
         </Modal>
       </section>

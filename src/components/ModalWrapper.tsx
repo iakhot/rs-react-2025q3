@@ -6,8 +6,10 @@ interface Props {
 }
 function ModalWrapper({ children, onClose }: Props) {
   return (
-    <div className="modal">
-      <button onClick={onClose}>Close</button>
+    <div className="flex flex-col justify-center p-8 max-w-sm">
+      <div className="mb-6">
+        <button onClick={onClose}>Close</button>
+      </div>
       {children}
     </div>
   );

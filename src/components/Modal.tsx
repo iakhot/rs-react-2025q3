@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type RefObject,
 } from 'react';
 import { createPortal } from 'react-dom';
 import ModalWrapper from './ModalWrapper';
@@ -14,7 +15,7 @@ function Modal({
   title,
 }: {
   children: ReactNode;
-  container: HTMLElement;
+  container: RefObject<HTMLElement | null>;
   title: string;
 }) {
   const [showModal, setShowModal] = useState(false);
@@ -40,23 +41,23 @@ function Modal({
     };
   }, [showModal, handleClose]);
 
-  useEffect(() => {
-    const handleBlur = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as HTMLElement)
-      ) {
-        handleClose();
-      }
-    };
-    if (showModal) {
-      document.addEventListener('mousedown', handleBlur);
-    }
+  //   useEffect(() => {
+  //     const handleBlur = (event: MouseEvent) => {
+  //       if (
+  //         modalRef.current &&
+  //         !modalRef.current.contains(event.target as HTMLElement)
+  //       ) {
+  //         handleClose();
+  //       }
+  //     };
+  //     if (showModal) {
+  //       document.addEventListener('mousedown', handleBlur);
+  //     }
 
-    return () => {
-      document.removeEventListener('mousedown', handleBlur);
-    };
-  }, [showModal, handleClose]);
+  //     return () => {
+  //       document.removeEventListener('mousedown', handleBlur);
+  //     };
+  //   }, [showModal, handleClose]);
 
   if (!container) {
     console.error('Target container is not found in DOM.');
@@ -67,9 +68,10 @@ function Modal({
     <div ref={modalRef}>
       <button onClick={() => setShowModal(true)}>{title}</button>
       {showModal &&
+        container.current &&
         createPortal(
           <ModalWrapper onClose={handleClose}>{children}</ModalWrapper>,
-          container
+          container.current
         )}
     </div>
   );
