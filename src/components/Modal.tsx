@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import ModalWrapper from './ModalWrapper';
+import { ModalContext } from '../common/types';
 
 function Modal({
   children,
@@ -66,11 +67,15 @@ function Modal({
 
   return (
     <div ref={modalRef}>
-      <button onClick={() => setShowModal(true)}>{title}</button>
+      {!showModal && (
+        <button onClick={() => setShowModal(true)}>{title}</button>
+      )}
       {showModal &&
         container.current &&
         createPortal(
-          <ModalWrapper onClose={handleClose}>{children}</ModalWrapper>,
+          <ModalContext value={{ handleClose: handleClose }}>
+            <ModalWrapper>{children}</ModalWrapper>
+          </ModalContext>,
           container.current
         )}
     </div>

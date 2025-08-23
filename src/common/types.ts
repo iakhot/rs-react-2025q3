@@ -1,3 +1,5 @@
+import { createContext } from 'react';
+
 export interface FormData {
   name?: string;
   age?: number;
@@ -14,3 +16,7 @@ export type Genders = (typeof GenderValues)[number];
 
 export const CountryValues = ['Russia', 'UK', 'USA'] as const;
 export type Country = (typeof CountryValues)[number];
+
+export const ModalContext = createContext({
+  handleClose: () => {},
+});
