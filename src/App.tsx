@@ -25,17 +25,22 @@ function App() {
     }
     setChangedFields(newChangedFields);
     setInitialControlledData(controlledData);
-    console.log(`===== Changed fff ${newChangedFields.toString()}`);
   }, [controlledData, initialControlledData]);
 
   return (
     <main className="flex min-w-[80vw] min-h-[80vh]">
-      <section id="uncontrolled" className="min-w-[48vw]" ref={m1}>
+      <section id="uncontrolled" className="min-w-1/2" ref={m1}>
         <Modal container={m1} title="Open Uncontrolled Form">
           <UncontrolledForm />
         </Modal>
+        {'uncontrolled-form' in result ? (
+          <Preview
+            data={result['uncontrolled-form']}
+            changedFields={changedFields}
+          />
+        ) : null}
       </section>
-      <section id="controlled" className="min-w-[48vw]" ref={m2}>
+      <section id="controlled" className="min-w-1/2" ref={m2}>
         <Modal container={m2} title="Open Controlled Form">
           <ControlledForm />
         </Modal>

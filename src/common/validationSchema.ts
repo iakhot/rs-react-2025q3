@@ -36,8 +36,10 @@ export const schema = yup.object({
     .optional(),
   gender: yup.string().required(),
   country: yup.string().optional(),
-  accepted: yup
+  accept: yup
     .boolean()
-    .test('AcceptT&C', 'Please, accept T&C', (value) => value)
+    .test('AcceptT&C', 'Accept T&C should be checked', (value) => value)
     .required(),
 });
+
+export type FormSchema = yup.InferType<typeof schema>;

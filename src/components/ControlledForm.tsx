@@ -8,16 +8,13 @@ import {
 } from '../common/types';
 import { GenderValues } from '../common/types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useFormStore } from '../common/store';
 import { convertToBase64 } from '../common/utils';
 import { useContext, useState } from 'react';
 import InputWrapper from './common/InputWrapper';
-import { schema } from '../common/validationSchema';
+import { schema, type FormSchema } from '../common/validationSchema';
 import RadioWrapper from './common/RadioWrapper';
 import CheckboxWrapper from './common/CheckboxWrapper';
-
-type FormSchema = yup.InferType<typeof schema>;
 
 function ControlledForm() {
   const { handleClose } = useContext(ModalContext);
@@ -65,7 +62,7 @@ function ControlledForm() {
 
   return (
     <>
-      <h2>Controlled Form</h2>
+      <h2 className="mb-6 font-medium">Controlled Form</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm">
         <InputWrapper label="Name" error={errors.name?.message}>
           <input
@@ -163,7 +160,7 @@ function ControlledForm() {
             className="mr-2 leading-tight"
             id="accept-terms"
             type="checkbox"
-            {...register('accepted')}
+            {...register('accept')}
             checked={acceptTerms}
             onChange={(e) => setAcceptTerms(Boolean(e.target.value))}
           />
