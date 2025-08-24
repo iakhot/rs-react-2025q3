@@ -42,23 +42,24 @@ function Modal({
     };
   }, [showModal, handleClose]);
 
-  useEffect(() => {
-    const handleBlur = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as HTMLElement)
-      ) {
-        handleClose();
-      }
-    };
-    if (showModal) {
-      document.addEventListener('mousedown', handleBlur);
-    }
+  //   useEffect(() => {
+  //     const handleBlur = (event: MouseEvent) => {
+  //       console.log(`====== MOUSE ${modalRef.current.contains(event.target)}`);
+  //       if (
+  //         modalRef.current &&
+  //         !modalRef.current.contains(event.target as HTMLElement)
+  //       ) {
+  //         handleClose();
+  //       }
+  //     };
+  //     if (showModal) {
+  //       document.addEventListener('mousedown', handleBlur);
+  //     }
 
-    return () => {
-      document.removeEventListener('mousedown', handleBlur);
-    };
-  }, [showModal, handleClose]);
+  //     return () => {
+  //       document.removeEventListener('mousedown', handleBlur);
+  //     };
+  //   }, [showModal, handleClose]);
 
   if (!container) {
     console.error('Target container is not found in DOM.');

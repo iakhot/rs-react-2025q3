@@ -108,7 +108,12 @@ function UncontrolledForm() {
   return (
     <>
       <h2 className="mb-6 font-medium">Uncontrolled Form</h2>
-      <form onSubmit={onSubmit} ref={formRef} className="w-full max-w-sm">
+      <form
+        onSubmit={onSubmit}
+        ref={formRef}
+        aria-label="uncontrolled-form"
+        className="w-full max-w-sm"
+      >
         <InputWrapper label="Name" error={errors.name?.message}>
           <input id="name-input" ref={nameRef} />
         </InputWrapper>

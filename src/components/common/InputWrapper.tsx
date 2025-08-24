@@ -27,7 +27,11 @@ function InputWrapper({ children, label, error }: Props) {
       </div>
       <div className="md:w-2/3">
         {child}
-        {error && <p className={errorStyle}>{error}</p>}
+        {error && (
+          <p data-testid={`${label}-error`} className={errorStyle}>
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

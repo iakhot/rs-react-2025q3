@@ -36,7 +36,7 @@ function Preview({
       )}
       <InputWrapper label={Fields.name}>
         <input
-          name={Fields.name}
+          id={Fields.name}
           type="text"
           value={data.name}
           disabled
@@ -49,7 +49,7 @@ function Preview({
       </InputWrapper>
       <InputWrapper label={Fields.age}>
         <input
-          name={Fields.age}
+          id={Fields.age}
           type="text"
           value={data.age}
           disabled
@@ -62,7 +62,7 @@ function Preview({
       </InputWrapper>
       <InputWrapper label={Fields.email}>
         <input
-          name={Fields.email}
+          id={Fields.email}
           type="text"
           value={data.email}
           disabled
@@ -75,7 +75,7 @@ function Preview({
       </InputWrapper>
       <InputWrapper label={Fields.password}>
         <input
-          name={Fields.password}
+          id={Fields.password}
           type="password"
           value={data.password}
           disabled
@@ -88,7 +88,7 @@ function Preview({
       </InputWrapper>
       <InputWrapper label={Fields.gender}>
         <input
-          name={Fields.gender}
+          id={Fields.gender}
           type="text"
           value={data.gender}
           disabled
@@ -101,7 +101,7 @@ function Preview({
       </InputWrapper>
       <InputWrapper label={Fields.country}>
         <input
-          name={Fields.country}
+          id={Fields.country}
           type="text"
           value={data.country}
           disabled
