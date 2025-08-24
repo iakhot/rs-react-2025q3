@@ -16,7 +16,9 @@ function InputWrapper({ children, label, error }: Props) {
     childType = (children.props as { type: string }).type;
   }
   if (childType !== 'file') {
-    child = cloneElement(children, { className: inputStyle });
+    child = cloneElement(children, {
+      className: inputStyle + ' ' + children.props['className'],
+    });
   }
   return (
     <div className=" md:flex md:items-center mb-6">
