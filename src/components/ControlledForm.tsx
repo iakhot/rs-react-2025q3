@@ -23,7 +23,7 @@ function ControlledForm() {
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormSchema>({ resolver: yupResolver(schema), mode: 'onBlur' });
+  } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
   const submitData = useFormStore((state) => state.receiveData);
 
   const [name, setName] = useState('');

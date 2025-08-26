@@ -8,7 +8,7 @@ import {
 import { schema, type FormSchema } from '../common/validationSchema';
 import CheckboxWrapper from './common/CheckboxWrapper';
 import InputWrapper from './common/InputWrapper';
-import type { FormData } from '../common/types';
+import type { FormData, FormErrors } from '../common/types';
 import { useContext, useRef, useState, type FormEvent } from 'react';
 import { convertToBase64 } from '../common/utils';
 import RadioWrapper from './common/RadioWrapper';
@@ -17,28 +17,28 @@ import { useFormStore } from '../common/store';
 const country_placeholder = 'Choose country';
 
 function UncontrolledForm() {
-  const nameRef = useRef(null);
-  const ageRef = useRef(null);
-  const emailRef = useRef(null);
-  const pwdRef = useRef(null);
-  const pwdConfirmRef = useRef(null);
-  const genderRef = useRef(null);
-  const pictureRef = useRef(null);
-  const countryRef = useRef(null);
-  const acceptRef = useRef(null);
-  const formRef = useRef(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const ageRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const pwdRef = useRef<HTMLInputElement>(null);
+  const pwdConfirmRef = useRef<HTMLInputElement>(null);
+  const genderRef = useRef<HTMLInputElement>(null);
+  const pictureRef = useRef<HTMLInputElement>(null);
+  const countryRef = useRef<HTMLSelectElement>(null);
+  const acceptRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const submitData = useFormStore((state) => state.receiveData);
   const { handleClose } = useContext(ModalContext);
 
   const handleReset = () => {
-    nameRef.current.value = '';
-    ageRef.current.value = '';
-    pwdRef.current.value = '';
-    pwdConfirmRef.current.value = '';
-    emailRef.current.value = '';
-    countryRef.current.value = '';
+    if (nameRef.current) nameRef.current.value = '';
+    if (ageRef.current) ageRef.current.value = '';
+    if (pwdRef.current) pwdRef.current.value = '';
+    if (pwdConfirmRef.current) pwdConfirmRef.current.value = '';
+    if (emailRef.current) emailRef.current.value = '';
+    if (countryRef.current) countryRef.current.value = '';
   };
 
   const prepareSubmit = async (data: FormSchema): Promise<FormData> => {
@@ -66,44 +66,48 @@ function UncontrolledForm() {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors({});
-    const form = new FormData(formRef.current);
-    const gender = form.get('gender');
+    if (formRef.current) {
+      const form = new FormData(formRef.current);
+      const gender = form.get('gender');
 
-    const newData: FormSchema = {
-      name: nameRef.current?.value,
-      age: ageRef.current?.value,
-      password: pwdRef.current?.value, /// TODO: encrypt
-      email: emailRef.current?.value,
-      gender: gender as Genders,
-      country: countryRef.current?.value as Country,
-      picture: pictureRef.current?.files,
-      accept: acceptRef.current?.checked,
-    };
+      const newData: FormSchema = {
+        name: nameRef.current?.value,
+        age: ageRef.current ? Number(ageRef.current.value) : undefined,
+        password: pwdRef.current?.value, /// TODO: encrypt
+        email: emailRef.current?.value,
+        gender: gender as Genders,
+        country: countryRef.current?.value as Country,
+        picture: pictureRef.current?.files
+          ? pictureRef.current?.files
+          : undefined,
+        accept: acceptRef.current ? acceptRef.current.checked : false,
+      };
 
-    await schema
-      .validate(newData, { abortEarly: false })
-      .then(async (validatedData) => {
-        const update = await prepareSubmit(validatedData);
-        submitData('uncontrolled-form', update);
-        console.log(update);
+      await schema
+        .validate(newData, { abortEarly: false })
+        .then(async (validatedData) => {
+          const update = await prepareSubmit(validatedData);
+          submitData('uncontrolled-form', update);
+          console.log(update);
 
-        handleReset();
-        handleClose();
-      })
-      .catch(async (errors) => {
-        const messages = errors.errors as string[];
-        console.log(`Validation errors: ${errors}`);
-        if (messages) {
-          const parsed = {};
-          for (const key in newData) {
-            const message = messages
-              .filter((m: string) => m.toLowerCase().startsWith(key))
-              .join('\r\n');
-            parsed[key] = { message: message };
+          handleReset();
+          handleClose();
+        })
+        .catch(async (errors) => {
+          const messages = errors.errors as string[];
+          console.log(`Validation errors: ${errors}`);
+          if (messages) {
+            const parsed: FormErrors = {};
+            for (const key in newData) {
+              const message = messages
+                .filter((m: string) => m.toLowerCase().startsWith(key))
+                .join('\r\n');
+              parsed[key as keyof FormErrors] = { message: message };
+            }
+            setErrors(parsed);
           }
-          setErrors(parsed);
-        }
-      });
+        });
+    }
   };
   return (
     <>

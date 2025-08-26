@@ -20,3 +20,19 @@ export type Country = (typeof CountryValues)[number];
 export const ModalContext = createContext({
   handleClose: () => {},
 });
+
+interface MessageObj {
+  message: string;
+}
+export interface FormErrors {
+  name?: MessageObj;
+  age?: MessageObj;
+  email?: MessageObj;
+  password?: MessageObj;
+  confirmPassword?: MessageObj;
+  gender?: MessageObj;
+  acceptTerms?: MessageObj;
+  picture?: MessageObj;
+  country?: MessageObj;
+  accept?: MessageObj;
+}

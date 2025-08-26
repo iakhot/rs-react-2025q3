@@ -5,6 +5,7 @@ import Modal from './components/Modal';
 import UncontrolledForm from './components/UncontrolledForm';
 import { initialData, useFormStore } from './common/store';
 import Preview from './components/Preview';
+import type { FormData as MyFormData } from './common/types';
 
 function App() {
   const m1 = useRef<HTMLElement>(null);
@@ -13,13 +14,14 @@ function App() {
   const controlledData =
     'controlled-form' in result ? result['controlled-form'] : initialData;
   const [initialControlledData, setInitialControlledData] =
-    useState(initialData);
+    useState<MyFormData>(initialData);
   const [changedFields, setChangedFields] = useState<string[]>([]);
 
   useEffect(() => {
-    const newChangedFields = [];
+    const newChangedFields: string[] = [];
     for (const key in controlledData) {
-      if (controlledData[key] != initialControlledData[key]) {
+      const typedKey = key as keyof MyFormData;
+      if (controlledData[typedKey] != initialControlledData[typedKey]) {
         newChangedFields.push(key);
       }
     }

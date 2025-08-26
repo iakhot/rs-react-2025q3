@@ -7,7 +7,7 @@ import UncontrolledForm from './UncontrolledForm';
 
 describe('Modal', () => {
   it('opens a portal', async () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<HTMLDivElement>();
     const { ui } = setup(
       <div ref={ref}>
         <Modal container={ref} title="Open Controlled Form">
