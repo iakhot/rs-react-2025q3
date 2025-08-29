@@ -1,5 +1,9 @@
 import { Fragment, lazy, Suspense, useState } from 'react';
 import type { EmissionsData } from '../common/types';
+import { ModalTrigger } from './Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
+
 const CountryDetails = lazy(() => import('./CountryDetails'));
 
 function DataList({ items }: { items: EmissionsData }) {
@@ -12,6 +16,13 @@ function DataList({ items }: { items: EmissionsData }) {
           <td className="p-4 items-center justify-center">Country</td>
           <td className="p-4 items-center justify-center">Population</td>
           <td className="p-4 items-center justify-center rounded-r-lg">ISO</td>
+          <td className="max-w-fit float-right">
+            <ModalTrigger triggerChildren={<FontAwesomeIcon icon={faFilter} />}>
+              <div className="flex">
+                <span>Hello Filter</span>
+              </div>
+            </ModalTrigger>
+          </td>
         </tr>
       </thead>
       <tbody>
@@ -64,6 +75,7 @@ function DataList({ items }: { items: EmissionsData }) {
                 >
                   {iso}
                 </td>
+                <td></td>
               </tr>
               <tr
                 className={`w-full overflow-hidden transition-[max-height] delay-1000 duration-1000 ease-in-out  ${

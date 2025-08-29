@@ -1,13 +1,21 @@
-import { setupListeners } from '@reduxjs/toolkit/query'
 import { api } from './dataApi'
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import tableStateReducer from '../common/tableSlice'
 
-export const store = configureStore({
-    reducer: {
-        [api.reducerPath]: api.reducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(api.middleware),
-})
+const rootReducer = combineReducers({
+    [api.reducerPath]: api.reducer,
+    tableState: tableStateReducer,
+});
 
-setupListeners(store.dispatch)
+export const setupStore = (preloadedState?: Partial<RootState>) => {
+    return configureStore({
+        reducer: rootReducer,
+        preloadedState,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(api.middleware),
+    })
+};
+
+export type AppStore = ReturnType<typeof setupStore>;
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppDispatch = AppStore['dispatch'];

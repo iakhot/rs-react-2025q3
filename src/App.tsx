@@ -1,20 +1,27 @@
-import { lazy, startTransition, Suspense, useState } from 'react';
+import { lazy, startTransition, Suspense } from 'react';
 import './App.css';
 import fetchData from './common/serverAction';
 //import { useGetDataQuery } from './common/dataApi';
 import ListSkeleton from './components/ListSkeleton';
 import type { EmissionsData } from './common/types';
 
+import { selectTableData, setData } from './common/tableSlice';
+import { useAppDispatch, useAppSelector } from './common/hooks';
+
 const DataList = lazy(() => import('./components/DataList'));
 
 function App() {
   //const { data, error, isLoading } = useGetDataQuery();
-  const [data, setData] = useState<EmissionsData | null>(null);
+  //const [data, setData] = useState<EmissionsData | null>(null);
+  const data = useAppSelector(selectTableData);
+  const dispatch = useAppDispatch();
+  console.log(`=== App ${Object.keys(data)}`);
 
   const handleDownload = () => {
     startTransition(async () => {
       const data = await fetchData();
-      setData(data as EmissionsData);
+      console.log(`==== dwnl ${Object.keys(data as EmissionsData)}`);
+      dispatch(setData(data as EmissionsData));
     });
   };
 

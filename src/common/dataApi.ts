@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const apiUrl = 'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/';
 export const api = createApi({
-    reducerPath: 'moviesApi',
+    reducerPath: 'dataApi',
     baseQuery: fetchBaseQuery({
         baseUrl: apiUrl,
         referrer: '',
