@@ -32,7 +32,7 @@ interface Props {
 
 const ModalWrapper = ({ children, onClose }: Props) => {
   return (
-    <div className="rounded-lg min-w-[40vw] min-h-[50vh] shadow-indigo-500/50">
+    <div className="rounded-lg min-w-[200px] min-h-[200px] ">
       <button type="button" className="button max-w-fit" onClick={onClose}>
         <FontAwesomeIcon icon={faXmark} />
       </button>
@@ -75,7 +75,9 @@ const Dialog = ({ children }: { children: ReactNode }) => {
       className="flex fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       aria-modal="true"
     >
-      <ModalWrapper onClose={handleClose}>{children}</ModalWrapper>
+      <div className="rounded bg-gray-400 shadow-indigo-500/50">
+        <ModalWrapper onClose={handleClose}>{children}</ModalWrapper>
+      </div>
     </dialog>
   );
 };

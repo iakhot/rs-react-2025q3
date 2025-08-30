@@ -3,6 +3,7 @@ import type { EmissionsData } from '../common/types';
 import { ModalTrigger } from './Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import ColumnSelector from './ColumnSelector';
 
 const CountryDetails = lazy(() => import('./CountryDetails'));
 
@@ -18,9 +19,7 @@ function DataList({ items }: { items: EmissionsData }) {
           <td className="p-4 items-center justify-center rounded-r-lg">ISO</td>
           <td className="max-w-fit float-right">
             <ModalTrigger triggerChildren={<FontAwesomeIcon icon={faFilter} />}>
-              <div className="flex">
-                <span>Hello Filter</span>
-              </div>
+              <ColumnSelector />
             </ModalTrigger>
           </td>
         </tr>

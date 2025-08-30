@@ -1,10 +1,12 @@
 import { api } from './dataApi'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import tableStateReducer from '../common/tableSlice'
+import tableReducer from '../common/tableSlice'
+import columnReducer from '../common/columnSlice';
 
 const rootReducer = combineReducers({
     [api.reducerPath]: api.reducer,
-    tableState: tableStateReducer,
+    tableState: tableReducer,
+    columnState: columnReducer,
 });
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {

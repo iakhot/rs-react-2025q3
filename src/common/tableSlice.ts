@@ -1,5 +1,5 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { EmissionsData } from "./types";
+import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { CountryData, EmissionsData } from "./types";
 import type { RootState } from "./store";
 
 
@@ -8,7 +8,7 @@ interface AppStore {
     filters: Filters;
 }
 
-interface Filters {
+export interface Filters {
     selectedYear?: number;
 }
 
@@ -24,14 +24,27 @@ export const tableSlice = createSlice({
     initialState,
     reducers: {
         setData: (state, action: PayloadAction<EmissionsData>) => {
-            console.log(`==== action ${action.payload['Austria'].data.length}`);
+
             state.table = action.payload;
         },
+        setFilters: (state, action: PayloadAction<Filters>) => {
+            state.filters = { ...state.filters, ...action.payload };
+        }
     },
 });
 
 export default tableSlice.reducer;
 
-export const { setData } = tableSlice.actions;
-export const selectTableData = (state: RootState) => state.tableState.table;
-//export const selectByYear = (state: RootState) => state.table;
+export const { setData, setFilters } = tableSlice.actions;
+export const selectTable = (state: RootState) => state.tableState.table;
+export const selectFilters = (state: RootState) => state.tableState.filters;
+export const selectByYear = createSelector([selectTable, selectFilters], (data, filter) => {
+    if (filter.selectedYear) {
+        const newData: Record<string, CountryData> = {};
+        Object.keys(data).forEach((country) =>
+            newData[country] = { ...data[country], data: data[country].data.filter((d) => d.year == filter.selectedYear) }
+        );
+        return newData;
+    }
+    return data;
+});
