@@ -40,3 +40,14 @@
 .read-the-docs {
   color: #888;
 }
+
+.table-button {
+  padding: 0;
+  background-color: transparent;
+}
+.table-button:hover {
+  border: 0;
+}
+.table-button:focus {
+  outline: none;
+}

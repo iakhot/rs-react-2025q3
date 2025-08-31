@@ -1,5 +1,6 @@
-export type EmissionsData = Record<string, CountryData>;
 export interface CountryData {
+  name: string;
+  population?: number;
   iso_code?: string;
   data: YearData[];
 }

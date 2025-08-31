@@ -7,7 +7,7 @@ const CountryDetails = lazy(() => import('./CountryDetails'));
 function TableRow({ item, name }: { item: CountryData; name: string }) {
   const [open, setIsOpen] = useState(false);
   const iso = item.iso_code ?? 'N/A';
-  const pop = item.data.at(-1)?.population ?? 'N/A';
+  const pop = item.data?.at(-1)?.population ?? 'N/A';
   return (
     <>
       <tr className="cursor-pointer bg-gray-200 text-gray-800">

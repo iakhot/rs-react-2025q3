@@ -32,8 +32,12 @@ interface Props {
 
 const ModalWrapper = ({ children, onClose }: Props) => {
   return (
-    <div className="rounded-lg min-w-[200px] min-h-[200px] ">
-      <button type="button" className="button max-w-fit" onClick={onClose}>
+    <div className="flex flex-col rounded-lg min-w-[300px] min-h-[400px]">
+      <button
+        type="button"
+        className="table-button m-2 ml-auto max-w-fit"
+        onClick={onClose}
+      >
         <FontAwesomeIcon icon={faXmark} />
       </button>
       {children}
@@ -88,7 +92,7 @@ const Trigger = ({ children }: { children: ReactNode }) => {
   return (
     <button
       type="button"
-      className=""
+      className="float-right mr-4 table-button"
       onClick={() => {
         setShowModal(true);
       }}
@@ -119,4 +123,5 @@ Modal.Dialog = Dialog;
 Modal.Trigger = Trigger;
 Modal.Root = Root;
 
-export { ModalTrigger };
+export { ModalTrigger, ModalContext };
+export type { ContextType };

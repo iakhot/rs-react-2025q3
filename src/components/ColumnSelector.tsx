@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
   initialState,
   selectDisplayColumns,
@@ -5,10 +6,12 @@ import {
 } from '../common/columnSlice';
 import { useAppDispatch, useAppSelector } from '../common/hooks';
 import { Columns } from '../common/types';
+import { ModalContext, type ContextType } from './Modal';
 
 const fixedColumns = initialState.displayColumns;
 
 function ColumnSelector() {
+  const { setShowModal } = useContext(ModalContext) as ContextType;
   const dispatch = useAppDispatch();
   const displayedColumns = useAppSelector(selectDisplayColumns);
 
@@ -19,13 +22,14 @@ function ColumnSelector() {
     const columns = formData.getAll('column-input') as string[];
 
     dispatch(setColumns(columns));
+    setShowModal(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col p-4">
-      <label>Display data:</label>
+    <form onSubmit={handleSubmit} className="flex flex-col px-6">
+      <h3>Display data:</h3>
       {Object.keys(Columns).map((c) => (
-        <label key={c} htmlFor={c}>
+        <div key={c} className="flex items-center">
           <input
             id={c}
             type="checkbox"
@@ -33,13 +37,16 @@ function ColumnSelector() {
             value={c}
             disabled={fixedColumns.includes(c)}
             defaultChecked={displayedColumns.includes(c)}
+            className="w-4 h-4 mr-3"
           />
-          {Columns[c as keyof typeof Columns]}
-        </label>
+          <label htmlFor={c}>{Columns[c as keyof typeof Columns]}</label>
+        </div>
       ))}
-      <button type="submit" aria-label="submit" className="max-w-fit">
-        Apply
-      </button>
+      <div className="flex justify-center m-4">
+        <button type="submit" aria-label="submit" className="max-w-fit">
+          Apply
+        </button>
+      </div>
     </form>
   );
 }

@@ -3,12 +3,14 @@ import {
   createSlice,
   type PayloadAction,
 } from '@reduxjs/toolkit';
-import type { CountryData, EmissionsData } from './types';
+import type { CountryData } from './types';
 import type { RootState } from './store';
+import { sortData } from './utils';
 
 interface AppStore {
-  table: EmissionsData;
+  table: CountryData[];
   filters: Filters;
+  sort: Sort;
 }
 
 export interface Filters {
@@ -16,11 +18,23 @@ export interface Filters {
   countryName?: string;
 }
 
+export const OrderValues = ['asc', 'desc'] as const;
+export type Order = (typeof OrderValues)[number];
+
+export interface Sort {
+  column: string;
+  order: Order;
+}
+
 const initialState: AppStore = {
-  table: {},
+  table: [],
   filters: {
     selectedYear: undefined,
     countryName: undefined,
+  },
+  sort: {
+    column: 'name',
+    order: 'asc',
   },
 };
 
@@ -28,46 +42,50 @@ export const tableSlice = createSlice({
   name: 'tableState',
   initialState,
   reducers: {
-    setData: (state, action: PayloadAction<EmissionsData>) => {
+    setData: (state, action: PayloadAction<Array<CountryData>>) => {
       state.table = action.payload;
     },
     setFilters: (state, action: PayloadAction<Filters>) => {
       state.filters = { ...state.filters, ...action.payload };
+    },
+    setSort: (state, action: PayloadAction<Sort>) => {
+      state.sort = { ...action.payload };
     },
   },
 });
 
 export default tableSlice.reducer;
 
-export const { setData, setFilters } = tableSlice.actions;
+export const { setData, setFilters, setSort } = tableSlice.actions;
 export const selectTable = (state: RootState) => state.tableState.table;
 export const selectFilters = (state: RootState) => state.tableState.filters;
+export const selectSort = (state: RootState) => state.tableState.sort;
 export const selectByYear = createSelector(
-  [selectTable, selectFilters],
-  (data, filter) => {
-    if (!filter.countryName && !filter.selectedYear) return data;
+  [selectTable, selectFilters, selectSort],
+  (data, filter, sort) => {
+    if (!filter.countryName && !filter.selectedYear && !sort) return data;
 
-    let newData: Record<string, CountryData> = {};
-    if (filter.countryName) {
-      const matches = Object.keys(data).filter((name) => {
-        const filtered = filter.countryName
-          ? name.toLowerCase().startsWith(filter.countryName.toLowerCase())
-          : true;
-        return filtered;
-      });
-      matches.map((c) => (newData[c] = { ...data[c] }));
-    }
-
-    if (filter.selectedYear) {
-      newData =
-        Object.keys(newData).length > 0 ? newData : structuredClone(data);
-      Object.keys(newData).forEach(
-        (country) =>
-          (newData[country].data = newData[country].data.filter(
-            (d) => d.year == filter.selectedYear
-          ))
+    let temp: CountryData[] = [];
+    const country = filter.countryName;
+    if (country) {
+      temp = data.filter((item: CountryData) =>
+        item.name?.toLowerCase().startsWith(country.toLowerCase())
       );
     }
-    return newData;
+    if (filter.selectedYear) {
+      temp = temp.length > 0 ? temp : structuredClone(data);
+      temp = temp.map((item) => {
+        return {
+          ...item,
+          data: item.data.filter((y) => y.year == filter.selectedYear),
+        };
+      });
+    }
+    if (sort) {
+      temp = temp.length > 0 ? temp : structuredClone(data);
+      console.log(JSON.stringify(sort));
+      temp = sortData(temp, sort);
+    }
+    return temp;
   }
 );

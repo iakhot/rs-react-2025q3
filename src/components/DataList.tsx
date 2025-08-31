@@ -1,15 +1,37 @@
 import { lazy } from 'react';
-import type { EmissionsData } from '../common/types';
+import { type CountryData } from '../common/types';
 import { ModalTrigger } from './Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFilter,
+  faArrowDownShortWide,
+  faArrowUpWideShort,
+} from '@fortawesome/free-solid-svg-icons';
 import ColumnSelector from './ColumnSelector';
 import Filter from './Filter';
+import { useAppDispatch, useAppSelector } from '../common/hooks';
+import { selectSort, setSort, type Sort } from '../common/tableSlice';
 
 const TableRow = lazy(() => import('./TableRow'));
 
-function DataList({ items }: { items: EmissionsData }) {
-  if (Object.keys(items).length == 0) return <p>No Data</p>;
+function DataList({ items }: { items: CountryData[] }) {
+  const sortParams = useAppSelector(selectSort);
+  const dispatch = useAppDispatch();
+
+  const getSortIcon = (column: string, sortParams: Sort) => {
+    if (sortParams.column === column) {
+      return sortParams.order === 'asc'
+        ? faArrowDownShortWide
+        : faArrowUpWideShort;
+    }
+    return faArrowDownShortWide;
+  };
+
+  const handleSort = (column: string) => {
+    const order = sortParams.order === 'asc' ? 'desc' : 'asc';
+    dispatch(setSort({ column, order }));
+  };
+  if (items.length == 0) return <p>No Data</p>;
   return (
     <>
       <Filter />
@@ -17,12 +39,32 @@ function DataList({ items }: { items: EmissionsData }) {
         <thead className="">
           <tr className="text-base text-white font-semibold ">
             <td className="p-4 items-center justify-center rounded-l-lg"></td>
-            <td className="p-4 items-center justify-center">Country</td>
-            <td className="p-4 items-center justify-center">Population</td>
+            <td className="p-4 items-center justify-center">
+              <span>Country</span>
+              <button
+                type="button"
+                aria-label="sort-population"
+                onClick={() => handleSort('name')}
+                className="float-right table-button"
+              >
+                <FontAwesomeIcon icon={getSortIcon('name', sortParams)} />
+              </button>
+            </td>
+            <td className="p-4 items-center justify-center">
+              <span>Population</span>
+              <button
+                type="button"
+                aria-label="sort-population"
+                onClick={() => handleSort('population')}
+                className="table-button float-right"
+              >
+                <FontAwesomeIcon icon={getSortIcon('population', sortParams)} />
+              </button>
+            </td>
             <td className="p-4 items-center justify-center rounded-r-lg">
               ISO
             </td>
-            <td className="max-w-fit float-right">
+            <td className="max-w-fit items-center justify-center">
               <ModalTrigger
                 triggerChildren={<FontAwesomeIcon icon={faFilter} />}
               >
@@ -32,8 +74,12 @@ function DataList({ items }: { items: EmissionsData }) {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(items).map((key) => (
-            <TableRow item={items[key]} name={key} key={key} />
+          {items.map((country) => (
+            <TableRow
+              item={country}
+              name={country.name ?? ''}
+              key={country.name}
+            />
           ))}
         </tbody>
       </table>
