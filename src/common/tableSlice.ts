@@ -60,7 +60,7 @@ export const { setData, setFilters, setSort } = tableSlice.actions;
 export const selectTable = (state: RootState) => state.tableState.table;
 export const selectFilters = (state: RootState) => state.tableState.filters;
 export const selectSort = (state: RootState) => state.tableState.sort;
-export const selectByYear = createSelector(
+export const selectFilteredData = createSelector(
   [selectTable, selectFilters, selectSort],
   (data, filter, sort) => {
     if (!filter.countryName && !filter.selectedYear && !sort) return data;
@@ -83,7 +83,6 @@ export const selectByYear = createSelector(
     }
     if (sort) {
       temp = temp.length > 0 ? temp : structuredClone(data);
-      console.log(JSON.stringify(sort));
       temp = sortData(temp, sort);
     }
     return temp;

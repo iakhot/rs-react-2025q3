@@ -2,9 +2,17 @@ import { useAppSelector } from '../common/hooks';
 import { selectDisplayColumns } from '../common/columnSlice';
 import { Columns, type YearData } from '../common/types';
 import { convertFloat } from '../common/utils';
+import { memo, useMemo } from 'react';
 
-function CountryDetails({ years, open }: { years: YearData[]; open: boolean }) {
-  const displayColumns = useAppSelector(selectDisplayColumns);
+const CountryDetails = memo(function CountryDetails({
+  years,
+  open,
+}: {
+  years: YearData[];
+  open: boolean;
+}) {
+  const columnsSelector = useMemo(() => selectDisplayColumns, []);
+  const displayColumns = useAppSelector((state) => columnsSelector(state));
   const last = displayColumns.length - 1;
   const header = displayColumns.map((c, index) => (
     <th
@@ -37,6 +45,6 @@ function CountryDetails({ years, open }: { years: YearData[]; open: boolean }) {
       <tbody className="text-gray-800">{values}</tbody>
     </table>
   );
-}
+});
 
 export default CountryDetails;

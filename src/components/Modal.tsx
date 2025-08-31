@@ -57,7 +57,8 @@ const Dialog = ({ children }: { children: ReactNode }) => {
 
   const handleClose = useCallback(() => {
     setShowModal(false);
-  }, []);
+  }, [setShowModal]);
+
   const handleBackdropClick = (event: React.MouseEvent<HTMLDialogElement>) => {
     if (event.target === event.currentTarget) {
       dialogRef.current?.close();

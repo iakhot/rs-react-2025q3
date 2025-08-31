@@ -1,10 +1,16 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, memo, Suspense, useState } from 'react';
 import type { CountryData } from '../common/types';
 import ListSkeleton from './ListSkeleton';
 
 const CountryDetails = lazy(() => import('./CountryDetails'));
 
-function TableRow({ item, name }: { item: CountryData; name: string }) {
+const TableRow = memo(function TableRow({
+  item,
+  name,
+}: {
+  item: CountryData;
+  name: string;
+}) {
   const [open, setIsOpen] = useState(false);
   const iso = item.iso_code ?? 'N/A';
   const pop = item.data?.at(-1)?.population ?? 'N/A';
@@ -59,6 +65,6 @@ function TableRow({ item, name }: { item: CountryData; name: string }) {
       </tr>
     </>
   );
-}
+});
 
 export default TableRow;

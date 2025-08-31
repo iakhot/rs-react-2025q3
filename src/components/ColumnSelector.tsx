@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import {
   initialState,
   selectDisplayColumns,
@@ -13,17 +13,21 @@ const fixedColumns = initialState.displayColumns;
 function ColumnSelector() {
   const { setShowModal } = useContext(ModalContext) as ContextType;
   const dispatch = useAppDispatch();
-  const displayedColumns = useAppSelector(selectDisplayColumns);
+  const columnsSelector = useMemo(() => selectDisplayColumns, []);
+  const displayedColumns = useAppSelector((state) => columnsSelector(state));
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const target = event.currentTarget;
-    const formData = new FormData(target);
-    const columns = formData.getAll('column-input') as string[];
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const target = event.currentTarget;
+      const formData = new FormData(target);
+      const columns = formData.getAll('column-input') as string[];
 
-    dispatch(setColumns(columns));
-    setShowModal(false);
-  };
+      dispatch(setColumns(columns));
+      setShowModal(false);
+    },
+    [dispatch, setShowModal]
+  );
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col px-6">

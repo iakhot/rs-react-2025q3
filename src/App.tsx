@@ -1,16 +1,20 @@
-import { lazy, startTransition, Suspense } from 'react';
+import { lazy, startTransition, Suspense, useMemo } from 'react';
 import './App.css';
 import fetchData from './common/serverAction';
 import ListSkeleton from './components/ListSkeleton';
 import type { CountryData } from './common/types';
 
-import { selectByYear, setData } from './common/tableSlice';
+import { selectFilteredData, setData } from './common/tableSlice';
 import { useAppDispatch, useAppSelector } from './common/hooks';
 
 const DataList = lazy(() => import('./components/DataList'));
 
 function App() {
-  const data = useAppSelector(selectByYear) as CountryData[];
+  const filteredSelector = useMemo(() => selectFilteredData, []);
+  const data = useAppSelector((state) =>
+    filteredSelector(state)
+  ) as CountryData[];
+
   const dispatch = useAppDispatch();
 
   const handleDownload = () => {

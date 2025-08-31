@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../common/hooks';
 import { selectFilters, setFilters, type Filters } from '../common/tableSlice';
 export const inputStyle = `bg-gray-200
@@ -14,28 +15,34 @@ export const inputStyle = `bg-gray-200
               focus:bg-white`;
 
 function Filter() {
-  const { selectedYear, countryName } = useAppSelector(selectFilters);
+  const filterSelector = useMemo(() => selectFilters, []);
+  const { selectedYear, countryName } = useAppSelector((state) =>
+    filterSelector(state)
+  );
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const target = event.currentTarget;
-    const formData = new FormData(target);
-    const year = Number(formData.get('year-input'));
-    const name = formData.get('country-input')?.toString();
-    const newFilters: Filters = {
-      countryName: undefined,
-      selectedYear: undefined,
-    };
-    if (year) {
-      newFilters.selectedYear = year;
-    }
-    if (name !== '') {
-      newFilters.countryName = name;
-    }
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const target = event.currentTarget;
+      const formData = new FormData(target);
+      const year = Number(formData.get('year-input'));
+      const name = formData.get('country-input')?.toString();
+      const newFilters: Filters = {
+        countryName: undefined,
+        selectedYear: undefined,
+      };
+      if (year) {
+        newFilters.selectedYear = year;
+      }
+      if (name !== '') {
+        newFilters.countryName = name;
+      }
 
-    dispatch(setFilters(newFilters));
-  };
+      dispatch(setFilters(newFilters));
+    },
+    [dispatch]
+  );
 
   return (
     <div className="card flex justify-items-stretch">

@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, useCallback } from 'react';
 import { type CountryData } from '../common/types';
 import { ModalTrigger } from './Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,11 +27,16 @@ function DataList({ items }: { items: CountryData[] }) {
     return faArrowDownShortWide;
   };
 
-  const handleSort = (column: string) => {
-    const order = sortParams.order === 'asc' ? 'desc' : 'asc';
-    dispatch(setSort({ column, order }));
-  };
+  const handleSort = useCallback(
+    (column: string) => {
+      const order = sortParams.order === 'asc' ? 'desc' : 'asc';
+      dispatch(setSort({ column, order }));
+    },
+    [dispatch, sortParams.order]
+  );
+
   if (items.length == 0) return <p>No Data</p>;
+
   return (
     <>
       <Filter />
