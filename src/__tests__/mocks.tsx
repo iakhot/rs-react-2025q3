@@ -1,4 +1,9 @@
-import type { ApiMovie, ApiMovieDetails, ApiResult, Movie } from '../App';
+import type {
+  ApiMovie,
+  ApiMovieDetails,
+  ApiResult,
+  Movie,
+} from '../common/types';
 
 export const DUMMY_ERROR = 'Simulated error in ChildComponent';
 export const TOKEN_REGEX = new RegExp(/^([A-Z0-9-]{7,8}){4}$/);

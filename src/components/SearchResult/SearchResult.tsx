@@ -1,34 +1,34 @@
-import { Await, Outlet, useLoaderData, useSearchParams } from 'react-router';
+import { Outlet, useSearchParams } from 'react-router';
 import './index.css';
 import Loader from '../Loader';
-import React from 'react';
 import CardList from './CardList';
-import { useLocation } from 'react-router';
+import { useGetMoviesQuery } from '../../common/moviesApi';
+import { ErrorMessage } from '../common';
 
 function SearchResult() {
-  const { promise } = useLoaderData();
-  const location = useLocation();
   const [params] = useSearchParams();
   const movieId = params.get('details');
+  const page = params.get('page') ? Number(params.get('page')) : 1;
+  const term = params.get('query') ?? '';
+  const { currentData, error, isFetching } = useGetMoviesQuery(
+    {
+      searchTerm: term,
+      pageNumber: page,
+    },
+    { refetchOnMountOrArgChange: 300 }
+  );
+  if (error) {
+    return <ErrorMessage error={error} className="card min-vh70" />;
+  }
 
-  const getSuspenseKey = (): string => {
-    const newQuery = new URLSearchParams(params);
-    newQuery.delete('details');
-    const searchURL = `${location.pathname}${newQuery.toString()}`;
-    return searchURL;
-  };
+  if (isFetching && !currentData) {
+    return <Loader className="container center min-vh70" />;
+  }
 
   return (
     <>
       <div data-testid="search-result" className="card container min-vh70">
-        <React.Suspense
-          fallback={<Loader className="container center" />}
-          key={getSuspenseKey()}
-        >
-          <Await resolve={promise}>
-            {(promise) => <CardList items={promise} />}
-          </Await>
-        </React.Suspense>
+        {currentData ? <CardList items={currentData} /> : null}
         {movieId && (
           <div className="card sidebar">
             <Outlet />

@@ -1,15 +1,23 @@
 import { memo } from 'react';
-import type { ApiResult, Movie } from '../../App';
+import type { ApiResult, Movie } from '../../common/types';
 import Card from './Card';
 import './index.css';
 import Pagination from './Pagination';
-import { useAppSelector } from '../../common/hooks';
+import { useAppSelector, useTheme } from '../../common/hooks';
 import { selectedMovieIds } from './selectedSlice';
 import { DownloadSelected } from '../common';
+import { useGetMoviesQuery } from '../../common/moviesApi';
+import { selectSearchTerm } from '../Search/searchSlice';
 
 const CardList = memo(function CardList({ items }: { items: ApiResult }) {
   const { docs, pages, page } = items;
+  const searchTerm = useAppSelector(selectSearchTerm);
   const selectedIds = useAppSelector(selectedMovieIds);
+  const { refetch } = useGetMoviesQuery({
+    searchTerm: searchTerm,
+    pageNumber: page,
+  });
+  const { currentTheme } = useTheme();
 
   return (
     <>
@@ -32,6 +40,14 @@ const CardList = memo(function CardList({ items }: { items: ApiResult }) {
           <div className="card flex-child-container flex-row">
             <DownloadSelected hidden={selectedIds.length == 0} />
             {pages > 1 ? <Pagination pages={10} current={page} /> : null}
+            <button
+              title="Reload"
+              className={`reload ${currentTheme}`}
+              onClick={refetch}
+            >
+              <img src="/icons8-reload.png" />
+              Reload
+            </button>
           </div>
         </div>
       ) : (

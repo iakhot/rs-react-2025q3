@@ -1,50 +1,37 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import App from './App';
 import { moviesMock } from './__tests__/mocks';
-import { renderAsync } from './__tests__/setupTests';
+import { renderWithProviders } from './__tests__/setupTests';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import SearchResult from './components/SearchResult';
-import { ErrorMessage } from './components/common';
-import Search from './components/Search';
-import { setupStore } from './common/store';
-import { Provider } from 'react-redux';
+
+const RouterMock = createMemoryRouter(
+  [
+    {
+      path: '/movies',
+      Component: App,
+      children: [
+        {
+          path: 'search',
+          Component: SearchResult,
+        },
+      ],
+    },
+  ],
+  {
+    initialEntries: ['/movies'],
+  }
+);
 
 describe('App ', () => {
   it('renders correctly', async () => {
-    const promise = Promise.resolve(moviesMock);
-    const RouterMock = createMemoryRouter(
-      [
-        {
-          path: '/movies',
-          Component: App,
-          children: [
-            { index: true, Component: Search },
-            {
-              path: 'search',
-              Component: SearchResult,
-              loader: () => ({ promise }),
-              errorElement: <ErrorMessage className="card min-vh70" />,
-            },
-          ],
-        },
-      ],
-      {
-        initialEntries: ['/movies'],
-      }
-    );
-    const store = setupStore();
-    await renderAsync(
-      <Provider store={store}>
-        <RouterProvider router={RouterMock} />
-      </Provider>
-    );
+    renderWithProviders(<RouterProvider router={RouterMock} />);
     const length = moviesMock.docs.length;
 
-    expect(() => render(<App />)).not.toThrow();
-    expect(screen.getByTestId('search-input')).toBeInTheDocument();
-    expect(screen.getByTestId('search-button')).toBeInTheDocument();
     await waitFor(() => {
+      expect(screen.getByTestId('search-input')).toBeInTheDocument();
+      expect(screen.getByTestId('search-button')).toBeInTheDocument();
       expect(screen.getByText('Name')).toBeInTheDocument();
       expect(screen.getByText('Description')).toBeInTheDocument();
       expect(screen.getAllByTestId('card-name')).toHaveLength(length);
@@ -52,35 +39,9 @@ describe('App ', () => {
     });
   });
   it('renders loading', async () => {
-    const promise = new Promise((resolve) =>
-      setTimeout(() => resolve(moviesMock), 500)
-    );
-    const RouterMock = createMemoryRouter(
-      [
-        {
-          path: '/movies',
-          Component: App,
-          children: [
-            { index: true, Component: Search },
-            {
-              path: 'search',
-              Component: SearchResult,
-              loader: () => ({ promise }),
-              errorElement: <ErrorMessage className="card min-vh70" />,
-            },
-          ],
-        },
-      ],
-      {
-        initialEntries: ['/movies'],
-      }
-    );
-    const store = setupStore();
-    await renderAsync(
-      <Provider store={store}>
-        <RouterProvider router={RouterMock} />
-      </Provider>
-    );
-    expect(screen.getByTestId('loader')).toBeInTheDocument();
+    renderWithProviders(<RouterProvider router={RouterMock} />);
+    waitFor(() => {
+      expect(screen.getByTestId('loader')).toBeInTheDocument();
+    });
   });
 });

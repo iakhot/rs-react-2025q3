@@ -6,11 +6,17 @@ import {
   type FocusEvent,
 } from 'react';
 import './index.css';
-import { useAppDispatch, useLocalStorage } from '../../common/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useLocalStorage,
+} from '../../common/hooks';
 import { useNavigate } from 'react-router';
 import ThemeToggle from './ThemeToggle';
 import { ThemeContext } from '../../context/ThemeContext';
 import { unselectAll } from '../SearchResult/selectedSlice';
+import { selectSearchTerm, setSearchTerm } from './searchSlice';
+import { LS_KEYS } from '../../common/types';
 
 const getQueryString = (value: string): string => {
   return encodeURI(`search?query=${value}&page=1`);
@@ -18,19 +24,21 @@ const getQueryString = (value: string): string => {
 
 function Search() {
   const { currentTheme } = useContext(ThemeContext);
-  const [savedTerm, saveTerm] = useLocalStorage('searchTerm');
-  const [term, setTerm] = useState(savedTerm);
+  const [, saveTerm] = useLocalStorage(LS_KEYS.term);
+  const searchTerm = useAppSelector(selectSearchTerm);
+  const [inputVal, setInputVal] = useState(searchTerm);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    navigate(getQueryString(term));
+    navigate(getQueryString(searchTerm));
   }, []);
 
   const handleSearchClick = (value: string): void => {
     if (value !== undefined) {
       const term = value !== '' ? value.trim() : '';
       saveTerm(term);
+      dispatch(setSearchTerm(term));
       dispatch(unselectAll());
       navigate(getQueryString(term));
     }
@@ -42,18 +50,18 @@ function Search() {
         id="searchTerm"
         data-testid="search-input"
         className={`search-input input-${currentTheme}`}
-        value={term}
+        value={inputVal}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setTerm(e.currentTarget.value)
+          setInputVal(e.currentTarget.value)
         }
         onBlur={(e: FocusEvent<HTMLInputElement>) =>
-          setTerm(e.currentTarget?.value.trim())
+          setInputVal(e.currentTarget?.value.trim())
         }
       />
       <button
         id="searchButton"
         data-testid="search-button"
-        onClick={() => handleSearchClick(term)}
+        onClick={() => handleSearchClick(inputVal)}
         aria-label="Search button"
         title="Search"
         className={`search-button ${currentTheme}`}

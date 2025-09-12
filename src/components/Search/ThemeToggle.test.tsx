@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import ThemeToggle from './ThemeToggle';
 import { setup } from '../../__tests__/setupTests';
 import ThemeContextProvider from '../../context/ThemeContext';
+import { LS_KEYS } from '../../common/types';
 
-const themeKey = 'theme';
+const themeKey = LS_KEYS.theme;
 
 beforeEach(() => {
   localStorage.clear();
@@ -28,8 +29,8 @@ describe('ThemeToggle', () => {
     const toggle = screen.getByRole('checkbox');
     expect(toggle).toBeChecked();
     await ui.click(toggle);
-    waitFor(() => {
-      expect(localStorage.getItem(themeKey)).toBe(/Dark/i);
+    await waitFor(() => {
+      expect(localStorage.getItem(themeKey)).toMatch(/Light/i);
     });
   });
   it('toggles theme in LS', async () => {
@@ -42,8 +43,8 @@ describe('ThemeToggle', () => {
     const toggle = screen.getByRole('checkbox');
     expect(toggle).not.toBeChecked();
     await ui.click(toggle);
-    waitFor(() => {
-      expect(localStorage.getItem(themeKey)).toEqual('dark');
+    await waitFor(() => {
+      expect(localStorage.getItem(themeKey)).toMatch(/Dark/i);
     });
   });
 });

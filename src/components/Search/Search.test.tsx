@@ -3,9 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import Search from './Search';
 import { renderWithProviders } from '../../__tests__/setupTests';
 import { MemoryRouter } from 'react-router';
+import { LS_KEYS } from '../../common/types';
 
 const testVal = 'Avatar';
-const storageKey = 'searchTerm';
+const storageKey = LS_KEYS.term;
 const mockNavigate = vi.fn();
 
 vi.mock('react-router', async () => {
@@ -21,15 +22,18 @@ afterEach(() => {
 });
 
 describe('Search', () => {
-  it('renders correctly with term', () => {
-    localStorage.setItem(storageKey, testVal);
+  it('renders correctly with term', async () => {
+    globalThis.localStorage.setItem(storageKey, testVal);
     renderWithProviders(
       <MemoryRouter initialEntries={['/movies']}>
         <Search />
-      </MemoryRouter>
+      </MemoryRouter>,
+      { preloadedState: { search: { value: testVal } } }
     );
-    expect(screen.getByRole('button')).toHaveTextContent('Search');
-    expect(screen.getByRole('textbox')).toHaveValue(testVal);
+    await waitFor(() => {
+      expect(screen.getByRole('button')).toHaveTextContent('Search');
+      expect(screen.getByTestId('search-input')).toHaveValue(testVal);
+    });
   });
   it('renders correctly with empty term', () => {
     renderWithProviders(
@@ -81,17 +85,17 @@ describe('Search interaction', () => {
     expect(localStorage.getItem(storageKey)).toBe(testVal);
   });
   it('triggers callback on Search click', async () => {
-    localStorage.setItem(storageKey, testVal);
     const { user } = renderWithProviders(
       <MemoryRouter initialEntries={['/movies']}>
         <Search />
-      </MemoryRouter>
+      </MemoryRouter>,
+      { preloadedState: { search: { value: testVal } } }
     );
     const button = screen.getByTestId('search-button');
     expect(button).toBeInTheDocument();
     expect(screen.getByTestId('search-input')).toHaveValue(testVal);
     await user.click(button);
-    waitFor(() => {
+    await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith(
         expect.stringContaining(`search?query=${testVal}`)
       );

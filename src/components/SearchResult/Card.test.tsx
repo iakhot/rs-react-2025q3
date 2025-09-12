@@ -1,22 +1,20 @@
 import { screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import Card from './Card';
 import { movieStub } from '../../__tests__/mocks';
-import type { Movie } from '../../App';
+import type { Movie } from '../../common/types';
 import {
   createRouteStub,
   renderWithProviders,
 } from '../../__tests__/setupTests';
-import { useAppDispatch, useTheme } from '../../common/hooks';
 
-vi.mock('../../common/hooks');
-const mockDispatch = vi.mocked(useAppDispatch);
-const mockTheme = vi.mocked(useTheme);
-beforeEach(() => {
-  mockTheme.mockReturnValueOnce({
-    currentTheme: 'dark',
-    handleThemeSwitch: vi.fn(),
-  });
+const mockDispatch = vi.fn();
+vi.mock('../../common/hooks', async () => {
+  const actual = await vi.importActual('../../common/hooks');
+  return {
+    ...actual,
+    useAppDispatch: vi.fn(() => mockDispatch),
+  };
 });
 
 describe('Card', () => {
@@ -63,7 +61,7 @@ describe('Card', () => {
       <RouteStub initialEntries={['/search']} />
     );
     await user.click(screen.getByTitle('movie-selected'));
-    waitFor(() => {
+    await waitFor(() => {
       expect(mockDispatch).toHaveBeenCalledWith({
         payload: movieStub,
         type: 'selectedMovies/selectMovie',
@@ -73,13 +71,13 @@ describe('Card', () => {
   it('triggers unselect action', async () => {
     const RouteStub = createRouteStub(
       '/search',
-      <Card movie={movieStub} selected={false} />
+      <Card movie={movieStub} selected={true} />
     );
     const { user } = renderWithProviders(
       <RouteStub initialEntries={['/search']} />
     );
     await user.click(screen.getByTitle('movie-selected'));
-    waitFor(() => {
+    await waitFor(() => {
       expect(mockDispatch).toHaveBeenCalledWith({
         payload: movieStub.id,
         type: 'selectedMovies/unselectMovie',

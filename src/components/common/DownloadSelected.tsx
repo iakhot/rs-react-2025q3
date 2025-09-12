@@ -1,4 +1,4 @@
-import type { Movie } from '../../App';
+import type { Movie } from '../../common/types';
 import { useAppDispatch, useAppSelector, useTheme } from '../../common/hooks';
 import { formatCsv, saveFileDialog } from '../../common/utils';
 import { unselectAll, selectedMovies } from '../SearchResult/selectedSlice';
@@ -25,7 +25,7 @@ export function DownloadSelected({ hidden = true }: { hidden: boolean }) {
   return (
     <details
       open
-      id="download-selected"
+      data-testid="download-selected"
       className="flyout float-left"
       style={{ visibility: hidden ? 'hidden' : 'visible' }}
     >
